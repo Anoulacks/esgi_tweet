@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "498664374723",
+    "project_id": "esgi-tweet",
+    "storage_bucket": "esgi-tweet.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:498664374723:android:f2379e433944f3961d3d76",
+        "android_client_info": {
+          "package_name": "com.moc.sms.esgi_tweet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "498664374723-16gm3e1hvbv2i88sqaj9ju8i6o1li0u3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZisQWscBA6jniUGa-3yXuv5Vl8YsQx5k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "498664374723-16gm3e1hvbv2i88sqaj9ju8i6o1li0u3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "498664374723-vbk57l1qbgptdao4ijaulqqmg86eu3r3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.moc.sms.esgiTweet"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
