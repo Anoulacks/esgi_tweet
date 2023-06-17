@@ -1,9 +1,12 @@
 import 'dart:async';
 import 'dart:isolate';
 
+import 'package:esgi_tweet/repositorys/image_repository.dart';
+import 'package:esgi_tweet/repositorys/tweets_repository.dart';
 import 'package:esgi_tweet/repositorys/users_repository.dart';
 import 'package:esgi_tweet/screens/authentification/login_screen.dart';
 import 'package:esgi_tweet/screens/authentification/register_screen.dart';
+import 'package:esgi_tweet/screens/tweet/tweet_add_screen.dart';
 import 'package:esgi_tweet/screens/tweet/tweet_home_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -35,8 +38,18 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider(
-      create: (context) => UsersRepository(),
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider(
+          create: (context) => UsersRepository(),
+        ),
+        RepositoryProvider(
+          create: (context) => TweetsRepository(),
+        ),
+        RepositoryProvider(
+          create: (context) => ImageRepository(),
+        ),
+      ],
       child: MaterialApp(
         title: 'Esgi Tweet',
         theme: ThemeData(
@@ -56,6 +69,7 @@ class MyApp extends StatelessWidget {
           LoginScreen.routeName: (context) => const LoginScreen(),
           RegisterScreen.routeName: (context) => const RegisterScreen(),
           TweetHomeScreen.routeName: (context) => const TweetHomeScreen(),
+          TweetAddScreen.routeName: (context) => const TweetAddScreen(),
         },
       ),
     );
