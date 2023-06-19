@@ -54,6 +54,14 @@ class UsersRepository {
     }
   }
 
+  String? getCurrentUserID() {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      return user.uid;
+    }
+    return null;
+  }
+
   signOut(context) async {
     await FirebaseAuth.instance.signOut();
     LoginScreen.navigateTo(context);
