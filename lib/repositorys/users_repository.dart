@@ -1,10 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:esgi_tweet/models/user.dart';
 import 'package:esgi_tweet/screens/authentification/login_screen.dart';
+import 'package:esgi_tweet/screens/tweet/tweet_home_screen.dart';
 import 'package:esgi_tweet/screens/tweet/tweet_home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class UsersRepository {
 
+  final usersCollection = FirebaseFirestore.instance.collection('users');
 
   addUser(firstname, lastname, pseudo, birthDate, phoneNumber, address, email, password) async {
     try {
@@ -60,6 +63,11 @@ class UsersRepository {
       return user.uid;
     }
     return null;
+  }
+
+  Future<UserApp> getUserById(id) async {
+    final document = await usersCollection.doc(id).get();
+    return UserApp.fromSnapshot(document);
   }
 
   signOut(context) async {
