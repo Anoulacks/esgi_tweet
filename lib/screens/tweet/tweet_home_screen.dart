@@ -5,6 +5,8 @@ import 'package:esgi_tweet/screens/tweet/widgets/tweet_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../models/user.dart';
+
 class TweetHomeScreen extends StatelessWidget {
   static const String routeName = '/TweetHome';
 
@@ -54,14 +56,27 @@ class TweetHomeScreen extends StatelessWidget {
                 return ListView.builder(
                   itemCount: tweets.length,
                   itemBuilder: (context, index) {
-                    
                     final tweet = tweets[index];
-                    final userApp = RepositoryProvider.of<UsersRepository>(context).getUserById(tweet.userId);
-                    return TweetCard(
-                      tweet: tweet,
-                      user: userApp,
-                      onTap: () => {
-                        print('test getter')
+                    return FutureBuilder<UserApp>(
+                      future: RepositoryProvider.of<UsersRepository>(context)
+                          .getUserById(tweet.userId),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<UserApp> snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        } else if (snapshot.hasError) {
+                          print(snapshot.error);
+                          return Text('Error: ${snapshot.error}');
+                        }
+                        UserApp userApp = snapshot.data!;
+                        if (snapshot.hasData) {
+                          return TweetCard(
+                            tweet: tweet,
+                            user: userApp,
+                          );
+                        }
+                        return Text('Error: pas de données');
                       },
                     );
                   },
@@ -78,6 +93,7 @@ class TweetHomeScreen extends StatelessWidget {
   }
 
   void _onRefreshList(BuildContext context) {
+    print("refresh");
     final postBloc = BlocProvider.of<TweetsBloc>(context);
     postBloc.add(GetAllTweets());
   }

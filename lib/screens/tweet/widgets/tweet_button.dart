@@ -15,6 +15,7 @@ class TweetButton extends StatelessWidget {
               print("button pressed");
             },
             icon: Icon(icon),
+            iconSize: 18,
         ),
         Text(
           value,

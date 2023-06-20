@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:esgi_tweet/models/tweet.dart';
 
 class UserApp {
   final String? id;
@@ -11,13 +10,26 @@ class UserApp {
   final Timestamp birthDate;
   final String phoneNumber;
   final String address;
-  final List<String>? followers;
-  final List<String>? followings;
-  final List<Tweet>? tweets;
+  final List<dynamic>? followers;
+  final List<dynamic>? followings;
+  final List<dynamic>? tweets;
 
-  UserApp({this.id, required this.firstname, required this.lastname, required this.pseudo, required this.email, this.photoURL, required this.birthDate, required this.phoneNumber, required this.address, this.followers, this.followings, this.tweets});
+  UserApp(
+      {this.id,
+      required this.firstname,
+      required this.lastname,
+      required this.pseudo,
+      required this.email,
+      this.photoURL,
+      required this.birthDate,
+      required this.phoneNumber,
+      required this.address,
+      this.followers,
+      this.followings,
+      this.tweets});
 
-  factory UserApp.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> document) {
+  factory UserApp.fromSnapshot(
+      DocumentSnapshot<Map<String, dynamic>> document) {
     final data = document.data()!;
     return UserApp(
       id: document.id,
