@@ -7,8 +7,9 @@ class Tweet {
   final Timestamp date;
   final List<String>? likes;
   final List<String>? dislikes;
-  final List<String>? comments;
+  final List<Tweet>? comments;
   final String? image;
+  final String? idTweetParent;
 
   Tweet(
       {this.id,
@@ -18,7 +19,8 @@ class Tweet {
       this.likes,
       this.dislikes,
       this.comments,
-      this.image});
+      this.image,
+      this.idTweetParent});
 
   Map<String, dynamic> toMap() {
     return {
@@ -29,12 +31,28 @@ class Tweet {
       'likes': likes,
       'dislikes': dislikes,
       'comments': comments,
-      'image': image
+      'image': image,
+      'idTweetParent': idTweetParent,
     };
+  }
+
+  factory Tweet.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> document) {
+    final data = document.data()!;
+    return Tweet(
+      id: document.id,
+      userId: data["userId"],
+      body: data["body"],
+      date: data["date"],
+      likes: data["likes"],
+      dislikes: data["dislikes"],
+      comments: data["comments"],
+      image: data["image"],
+      idTweetParent: data["idTweetParent"],
+    );
   }
 
   @override
   String toString() {
-    return 'Post { id: $id, userId: $userId, body: $body, date: $date, likes: $likes, dislikes: $dislikes, comments: $comments, image: $image }';
+    return 'Tweet { id: $id, userId: $userId, body: $body, date: $date, likes: $likes, dislikes: $dislikes, comments: $comments, image: $image, idTweetParent: $idTweetParent }';
   }
 }

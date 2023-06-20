@@ -51,13 +51,26 @@ class _TweetAddScreenState extends State<TweetAddScreen> {
                 if (_tweetForm.currentState!.validate()) {
                   String? userUid = RepositoryProvider.of<UsersRepository>(context).getCurrentUserID();
                   if(userUid != null) {
-                    final urlImage = await RepositoryProvider.of<ImageRepository>(context).uploadImage(image);
-                    Tweet tweet = Tweet(
-                        userId: userUid,
-                        body: _bodyController.text,
-                        image: urlImage,
-                        date: Timestamp.now());
-                    RepositoryProvider.of<TweetsRepository>(context).addTweets(tweet);
+                    if(image != null) {
+                      final urlImage = await RepositoryProvider.of<
+                          ImageRepository>(context).uploadImage(image);
+                      Tweet tweet = Tweet(
+                          userId: userUid,
+                          body: _bodyController.text,
+                          image: urlImage,
+                          date: Timestamp.now()
+                      );
+                      RepositoryProvider.of<TweetsRepository>(context)
+                          .addTweets(tweet);
+                    } else {
+                      Tweet tweet = Tweet(
+                          userId: userUid,
+                          body: _bodyController.text,
+                          date: Timestamp.now()
+                      );
+                      RepositoryProvider.of<TweetsRepository>(context)
+                          .addTweets(tweet);
+                    }
                   }
                 }
               },
