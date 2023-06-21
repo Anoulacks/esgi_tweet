@@ -1,9 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:esgi_tweet/models/user.dart';
 import 'package:esgi_tweet/screens/authentification/login_screen.dart';
-import 'package:esgi_tweet/screens/tweet/tweet_home_screen.dart';
-import 'package:esgi_tweet/screens/tweet/tweet_home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:esgi_tweet/screens/area/area_screen.dart';
 
 class UsersRepository {
 
@@ -47,7 +46,7 @@ class UsersRepository {
           email: email,
           password: password
       );
-      TweetHomeScreen.navigateTo(context);
+      AreaScreen.navigateTo(context);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('Le mail ou le mot de passe est incorrect.');

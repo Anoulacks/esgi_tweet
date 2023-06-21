@@ -5,6 +5,7 @@ import 'package:esgi_tweet/blocs/tweets_bloc/tweets_bloc.dart';
 import 'package:esgi_tweet/repositorys/image_repository.dart';
 import 'package:esgi_tweet/repositorys/tweets_repository.dart';
 import 'package:esgi_tweet/repositorys/users_repository.dart';
+import 'package:esgi_tweet/screens/area/area_screen.dart';
 import 'package:esgi_tweet/screens/authentification/login_screen.dart';
 import 'package:esgi_tweet/screens/authentification/register_screen.dart';
 import 'package:esgi_tweet/screens/tweet/tweet_add_screen.dart';
@@ -72,6 +73,7 @@ class MyApp extends StatelessWidget {
             '/': (context) => const LoginScreen(),
             LoginScreen.routeName: (context) => const LoginScreen(),
             RegisterScreen.routeName: (context) => const RegisterScreen(),
+            AreaScreen.routeName: (context) => const AreaScreen(),
             TweetHomeScreen.routeName: (context) => const TweetHomeScreen(),
             TweetAddScreen.routeName: (context) => const TweetAddScreen(),
           },
