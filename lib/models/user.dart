@@ -12,7 +12,6 @@ class UserApp {
   final String address;
   final List<dynamic>? followers;
   final List<dynamic>? followings;
-  final List<dynamic>? tweets;
 
   UserApp(
       {this.id,
@@ -25,8 +24,23 @@ class UserApp {
       required this.phoneNumber,
       required this.address,
       this.followers,
-      this.followings,
-      this.tweets});
+      this.followings,});
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'firstname': firstname,
+      'lastname': lastname,
+      'pseudo': pseudo,
+      'email': email,
+      'photoURL': photoURL,
+      'birthDate': birthDate,
+      'phoneNumber': phoneNumber,
+      'address': address,
+      'followers': followers,
+      'followings': followings,
+    };
+  }
 
   factory UserApp.fromSnapshot(
       DocumentSnapshot<Map<String, dynamic>> document) {
@@ -43,7 +57,6 @@ class UserApp {
       address: data["address"],
       followers: data["followers"],
       followings: data["followings"],
-      tweets: data["tweets"],
     );
   }
 }

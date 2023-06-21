@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:isolate';
 
 import 'package:esgi_tweet/blocs/tweets_bloc/tweets_bloc.dart';
+import 'package:esgi_tweet/blocs/users_bloc/users_bloc.dart';
 import 'package:esgi_tweet/repositorys/image_repository.dart';
 import 'package:esgi_tweet/repositorys/tweets_repository.dart';
 import 'package:esgi_tweet/repositorys/users_repository.dart';
@@ -52,9 +53,21 @@ class MyApp extends StatelessWidget {
           create: (context) => ImageRepository(),
         ),
       ],
-      child: BlocProvider(
-        create: (context) => TweetsBloc(repository: RepositoryProvider.of<TweetsRepository>(context),
-        ),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) =>
+                TweetsBloc(
+                  repository: RepositoryProvider.of<TweetsRepository>(context),
+                ),
+          ),
+          BlocProvider(
+            create: (context) =>
+                UsersBloc(
+                    repository: RepositoryProvider.of<UsersRepository>(context)
+                ),
+          ),
+        ],
         child: MaterialApp(
           title: 'Esgi Tweet',
           theme: ThemeData(

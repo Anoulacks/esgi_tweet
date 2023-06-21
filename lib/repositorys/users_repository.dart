@@ -40,6 +40,14 @@ class UsersRepository {
     }
   }
 
+  Future<void> updateUser(UserApp user) async {
+    try {
+      await FirebaseFirestore.instance.collection('users').doc(user.id).set(user.toMap());
+    } catch (e) {
+      print(e);
+    }
+  }
+
   signIn(email, password, context) async {
     try {
       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
