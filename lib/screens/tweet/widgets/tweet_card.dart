@@ -1,8 +1,11 @@
 import 'package:esgi_tweet/models/tweet.dart';
 import 'package:esgi_tweet/models/user.dart';
+import 'package:esgi_tweet/repositorys/tweets_repository.dart';
+import 'package:esgi_tweet/repositorys/users_repository.dart';
 import 'package:esgi_tweet/screens/tweet/widgets/tweet_button.dart';
 import 'package:esgi_tweet/utils/date_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TweetCard extends StatelessWidget {
   final Tweet tweet;
@@ -60,8 +63,8 @@ class TweetCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  TweetButton(icon: Icons.chat, value: '${tweet.likes != null ? tweet.likes?.length : '0'}'),
-                  TweetButton(icon: Icons.favorite, value: '${tweet.comments != null ? tweet.comments?.length : '0'}'),
+                  TweetButton(icon: Icons.chat, value: '${tweet.likes != null ? tweet.likes?.length : '0'}', callback: _addComment,),
+                  TweetButton(icon: Icons.favorite, value: '${tweet.comments != null ? tweet.comments?.length : '0'}', callback: _updateLike,),
                 ],
               ),
             ],
@@ -70,5 +73,14 @@ class TweetCard extends StatelessWidget {
         const Divider(),
       ],
     );
+  }
+
+  void _updateLike(context) {
+    final userId = RepositoryProvider.of<UsersRepository>(context).getCurrentUserID();
+    RepositoryProvider.of<TweetsRepository>(context).updateLikeTweet(tweet?.id, userId);
+  }
+
+  void _addComment() {
+    print('add comment');
   }
 }

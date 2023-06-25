@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 class TweetButton extends StatelessWidget {
   final IconData icon;
   final String value;
+  final Function callback;
 
-  const TweetButton({Key? key, required this.icon, required this.value}) : super(key: key);
+  const TweetButton({Key? key, required this.icon, required this.value, required this.callback}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,6 +14,7 @@ class TweetButton extends StatelessWidget {
         IconButton(
             onPressed: () {
               print("button pressed");
+              callback(context);
             },
             icon: Icon(icon),
             iconSize: 18,

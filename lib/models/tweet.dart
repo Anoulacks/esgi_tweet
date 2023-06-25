@@ -5,9 +5,8 @@ class Tweet {
   final String userId;
   final String body;
   final Timestamp date;
-  final List<String>? likes;
-  final List<String>? dislikes;
-  final List<Tweet>? comments;
+  final List<dynamic>? likes;
+  final List<dynamic>? comments;
   final String? image;
   final String? idTweetParent;
 
@@ -17,7 +16,6 @@ class Tweet {
       required this.body,
       required this.date,
       this.likes,
-      this.dislikes,
       this.comments,
       this.image,
       this.idTweetParent});
@@ -29,7 +27,6 @@ class Tweet {
       'body': body,
       'date': date,
       'likes': likes,
-      'dislikes': dislikes,
       'comments': comments,
       'image': image,
       'idTweetParent': idTweetParent,
@@ -44,7 +41,6 @@ class Tweet {
       body: data["body"],
       date: data["date"],
       likes: data["likes"],
-      dislikes: data["dislikes"],
       comments: data["comments"],
       image: data["image"],
       idTweetParent: data["idTweetParent"],
@@ -53,6 +49,6 @@ class Tweet {
 
   @override
   String toString() {
-    return 'Tweet { id: $id, userId: $userId, body: $body, date: $date, likes: $likes, dislikes: $dislikes, comments: $comments, image: $image, idTweetParent: $idTweetParent }';
+    return 'Tweet { id: $id, userId: $userId, body: $body, date: $date, likes: $likes, comments: $comments, image: $image, idTweetParent: $idTweetParent }';
   }
 }

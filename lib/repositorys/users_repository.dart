@@ -63,12 +63,12 @@ class UsersRepository {
     }
   }
 
-  String? getCurrentUserID() {
+  String getCurrentUserID() {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       return user.uid;
     }
-    return null;
+    return '';
   }
 
   Future<UserApp> getUserById(id) async {
