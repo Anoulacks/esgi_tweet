@@ -1,4 +1,6 @@
+import 'package:esgi_tweet/blocs/users_bloc/users_bloc.dart';
 import 'package:esgi_tweet/repositorys/users_repository.dart';
+import 'package:esgi_tweet/screens/area/area_screen.dart';
 import 'package:esgi_tweet/screens/authentification/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -42,11 +44,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 obscureText: true,
               ),
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   if (_loginForm.currentState!.validate()) {
                     String email = _emailController.text;
                     String password = _passwordController.text;
-                    RepositoryProvider.of<UsersRepository>(context).signIn(email, password, context);
+                    await RepositoryProvider.of<UsersRepository>(context).signIn(email, password, context);
+                    BlocProvider.of<UsersBloc>(context).add(GetUser());
+                    AreaScreen.navigateTo(context);
                   }
                 },
                 child: const Text('se connecter'),

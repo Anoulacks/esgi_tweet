@@ -54,7 +54,6 @@ class UsersRepository {
           email: email,
           password: password
       );
-      AreaScreen.navigateTo(context);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('Le mail ou le mot de passe est incorrect.');

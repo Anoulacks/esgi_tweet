@@ -1,6 +1,7 @@
 import 'package:esgi_tweet/models/tweet.dart';
 import 'package:esgi_tweet/models/user.dart';
 import 'package:esgi_tweet/screens/tweet/widgets/tweet_button.dart';
+import 'package:esgi_tweet/utils/date_utils.dart';
 import 'package:flutter/material.dart';
 
 class TweetCard extends StatelessWidget {
@@ -33,7 +34,7 @@ class TweetCard extends StatelessWidget {
                 ),
               ),
               Text(
-                tweet.date.toDate().toString(),
+                timestampToString(tweet.date),
                 style: const TextStyle(
                   color: Colors.grey,
                   fontSize: 15.0,

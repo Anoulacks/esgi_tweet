@@ -59,4 +59,20 @@ class UserApp {
       followings: data["followings"],
     );
   }
+
+  @override
+  String toString() {
+    return 'UserApp('
+        'id: $id, '
+        'firstname: $firstname, '
+        'lastname: $lastname, '
+        'pseudo: $pseudo, '
+        'email: $email, '
+        'photoURL: $photoURL, '
+        'birthDate: $birthDate, '
+        'phoneNumber: $phoneNumber, '
+        'address: $address, '
+        'followers: $followers, '
+        'followings: $followings)';
+  }
 }

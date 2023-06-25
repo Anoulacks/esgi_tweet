@@ -93,7 +93,6 @@ class TweetHomeScreen extends StatelessWidget {
   }
 
   void _onRefreshList(BuildContext context) {
-    print("refresh");
     final postBloc = BlocProvider.of<TweetsBloc>(context);
     postBloc.add(GetAllTweets());
   }
