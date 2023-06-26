@@ -17,11 +17,24 @@ class TweetsBloc extends Bloc<TweetsEvent, TweetsState> {
       await Future.delayed(const Duration(seconds: 1));
       try {
         final tweetsData = await repository.getTweets();
-
         emit(state.copyWith(status: TweetsStatus.success, tweets: tweetsData));
       } catch (error) {
-        emit(
-            state.copyWith(status: TweetsStatus.error, error: error.toString()));
+        emit(state.copyWith(
+            status: TweetsStatus.error, error: error.toString()));
+        throw Exception(error);
+      }
+    });
+
+    on<GetTweetsDetail>((event, emit) async {
+      emit(state.copyWith(status: TweetsStatus.loading));
+      await Future.delayed(const Duration(seconds: 1));
+      try {
+        final tweetsData = await repository.getTweetsDetail(event.tweet);
+        tweetsData.insert(0, event.tweet);
+        emit(state.copyWith(status: TweetsStatus.success, tweetsDetail: tweetsData));
+      } catch (error) {
+        emit(state.copyWith(
+            status: TweetsStatus.error, error: error.toString()));
         throw Exception(error);
       }
     });

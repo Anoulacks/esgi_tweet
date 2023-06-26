@@ -47,6 +47,19 @@ class Tweet {
     );
   }
 
+  factory Tweet.fromFirestore(Map<String, dynamic> map, String id) {
+    return Tweet(
+      id: id,
+      userId: map["userId"],
+      body: map["body"],
+      date: map["date"],
+      likes: map["likes"],
+      comments: map["comments"],
+      image: map["image"],
+      idTweetParent: map["idTweetParent"],
+    );
+  }
+
   @override
   String toString() {
     return 'Tweet { id: $id, userId: $userId, body: $body, date: $date, likes: $likes, comments: $comments, image: $image, idTweetParent: $idTweetParent }';

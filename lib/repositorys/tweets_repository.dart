@@ -6,23 +6,42 @@ class TweetsRepository {
 
   addTweets(Tweet tweet) async {
     try {
-      await tweetsCollection.add(tweet.toMap());
+      DocumentReference tweetReference = await tweetsCollection.add(tweet.toMap());
+      if (tweet.idTweetParent != null && tweet.idTweetParent != '') {
+        updateCommentTweet(tweet.idTweetParent, tweetReference.id);
+      }
     } catch (error) {
       print("Failed to create tweet: $error");
     }
   }
 
   Future<List<Tweet>> getTweets() async {
-    final snapshot = await tweetsCollection.get();
+    final snapshot = await tweetsCollection.orderBy('date', descending: true).get();
     final tweetsData =
         snapshot.docs.map((element) => Tweet.fromSnapshot(element)).toList();
     return tweetsData;
   }
 
-  Stream<QuerySnapshot> getTweetsRealTime() {
+  Future<List<Tweet>> getTweetsDetail(tweet) async {
+    final snapshot = await tweetsCollection
+        .where('idTweetParent', isEqualTo: '${tweet.id}')
+        .orderBy('date', descending: true)
+        .get();
+    final tweetsData =
+    snapshot.docs.map((element) => Tweet.fromSnapshot(element)).toList();
+    return tweetsData;
+  }
 
-    final Stream<QuerySnapshot> tweetsStream = tweetsCollection.snapshots(includeMetadataChanges: true);
-    return tweetsStream;
+  Stream<List<Tweet>> getTweetsRealTime() {
+    try {
+      return tweetsCollection.snapshots().map((snapshot) {
+        return snapshot.docs.map((doc) {
+          return Tweet.fromFirestore(doc.data(), doc.id);
+        }).toList();
+      });
+    } catch (error) {
+      rethrow;
+    }
   }
 
   Future<void> updateLikeTweet(String? tweetId, String userId) {
@@ -42,11 +61,40 @@ class TweetsRepository {
           final currentLikes = List<String>.from((snapshot.get('likes') ?? []));
           if (!currentLikes.contains(userId)) {
             currentLikes.add(userId);
+          } else {
+            currentLikes.remove(userId);
           }
 
           transaction.update(documentReference, {'likes': currentLikes});
         })
         .then((value) => print("Likes count updated to $value"))
         .catchError((error) => print("Failed to update tweet likes: $error"));
+  }
+
+  Future<void> updateCommentTweet(String? tweetIdParent, String? tweetId) {
+    DocumentReference documentReference = tweetsCollection.doc(tweetIdParent);
+    return FirebaseFirestore.instance
+        .runTransaction((transaction) async {
+      DocumentSnapshot snapshot = await transaction.get(documentReference);
+
+      if (!snapshot.exists) {
+        throw Exception("Tweet does not exist!");
+      }
+
+      if (tweetIdParent == '') {
+        throw Exception("Tweet Parent does not exist!");
+      }
+
+      print('affiche tweet id et parentid $tweetId $tweetIdParent');
+
+      final currentComments = List<String>.from((snapshot.get('comments') ?? []));
+      if (!currentComments.contains(tweetId)) {
+        currentComments.add(tweetId!);
+      }
+
+      transaction.update(documentReference, {'comments': currentComments});
+    })
+        .then((value) => print("Comments count updated to $value"))
+        .catchError((error) => print("Failed to update tweet comments: $error"));
   }
 }

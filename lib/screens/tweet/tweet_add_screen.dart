@@ -12,11 +12,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class TweetAddScreen extends StatefulWidget {
   static const String routeName = '/TweetAdd';
 
-  static void navigateTo(BuildContext context) {
-    Navigator.of(context).pushNamed(routeName);
+  static void navigateTo(BuildContext context, String? tweetId) {
+    Navigator.of(context).pushNamed(routeName, arguments: tweetId);
   }
 
-  const TweetAddScreen({Key? key}) : super(key: key);
+  final String? tweetId;
+
+  const TweetAddScreen({Key? key, this.tweetId}) : super(key: key);
 
   @override
   State<TweetAddScreen> createState() => _TweetAddScreenState();
@@ -34,7 +36,10 @@ class _TweetAddScreenState extends State<TweetAddScreen> {
         leading: BackButton(
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text('Ajouter un Tweet'),
+        title: const Text(
+          'Ajouter un Tweet',
+        ),
+        centerTitle: true,
       ),
       body: Form(
         key: _tweetForm,
@@ -58,7 +63,8 @@ class _TweetAddScreenState extends State<TweetAddScreen> {
                           userId: userUid,
                           body: _bodyController.text,
                           image: urlImage,
-                          date: Timestamp.now()
+                          date: Timestamp.now(),
+                          idTweetParent: widget.tweetId
                       );
                       RepositoryProvider.of<TweetsRepository>(context)
                           .addTweets(tweet);
@@ -66,7 +72,8 @@ class _TweetAddScreenState extends State<TweetAddScreen> {
                       Tweet tweet = Tweet(
                           userId: userUid,
                           body: _bodyController.text,
-                          date: Timestamp.now()
+                          date: Timestamp.now(),
+                          idTweetParent: widget.tweetId
                       );
                       RepositoryProvider.of<TweetsRepository>(context)
                           .addTweets(tweet);

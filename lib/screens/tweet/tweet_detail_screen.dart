@@ -1,51 +1,48 @@
 import 'package:esgi_tweet/blocs/tweets_bloc/tweets_bloc.dart';
+import 'package:esgi_tweet/models/tweet.dart';
+import 'package:esgi_tweet/models/user.dart';
 import 'package:esgi_tweet/repositorys/users_repository.dart';
 import 'package:esgi_tweet/screens/tweet/tweet_add_screen.dart';
 import 'package:esgi_tweet/screens/tweet/widgets/tweet_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../models/user.dart';
+class TweetDetailScreen extends StatefulWidget {
+  static const String routeName = '/TweetDetail';
 
-class TweetHomeScreen extends StatefulWidget {
-  static const String routeName = '/TweetHome';
-
-  static void navigateTo(BuildContext context) {
-    Navigator.of(context).pushNamed(routeName);
+  static void navigateTo(BuildContext context, Tweet tweet) {
+    Navigator.of(context).pushNamed(routeName, arguments: tweet);
   }
 
-  const TweetHomeScreen({Key? key}) : super(key: key);
+  final Tweet tweet;
+
+  const TweetDetailScreen({Key? key, required this.tweet}) : super(key: key);
 
   @override
-  State<TweetHomeScreen> createState() => _TweetHomeScreenState();
+  State<TweetDetailScreen> createState() => _TweetDetailScreenState();
 }
 
-class _TweetHomeScreenState extends State<TweetHomeScreen> {
+class _TweetDetailScreenState extends State<TweetDetailScreen> {
+
   @override
   void initState() {
     super.initState();
-    _fetchPosts();
+    _fetchTweets();
   }
 
-  void _fetchPosts() {
-    context.read<TweetsBloc>().add(GetAllTweets());
+  void _fetchTweets() {
+    print('test');
+    context.read<TweetsBloc>().add(GetTweetsDetail(widget.tweet));
   }
+
 
   @override
   Widget build(BuildContext context) {
     return Builder(builder: (context) {
       return Scaffold(
         appBar: AppBar(
-          title: const Text('ESGI Tweet'),
+          title: const Text('Tweet Detail'),
           centerTitle: true,
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.refresh),
-              onPressed: () {
-                _onRefreshList(context);
-              },
-            ),
-          ],
         ),
         body: BlocBuilder<TweetsBloc, TweetsState>(
           builder: (context, state) {
@@ -61,7 +58,7 @@ class _TweetHomeScreenState extends State<TweetHomeScreen> {
                   child: Text(state.error),
                 );
               case TweetsStatus.success:
-                final tweets = state.tweets;
+                final tweets = state.tweetsDetail;
 
                 if (tweets.isEmpty) {
                   return const Center(
@@ -100,16 +97,7 @@ class _TweetHomeScreenState extends State<TweetHomeScreen> {
             }
           },
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => {TweetAddScreen.navigateTo(context, '')},
-          child: const Icon(Icons.add),
-        ),
       );
     });
-  }
-
-  void _onRefreshList(BuildContext context) {
-    final postBloc = BlocProvider.of<TweetsBloc>(context);
-    postBloc.add(GetAllTweets());
   }
 }
