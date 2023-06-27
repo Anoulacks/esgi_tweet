@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:esgi_tweet/blocs/users_bloc/users_bloc.dart';
 import 'package:esgi_tweet/models/user.dart';
 import 'package:esgi_tweet/screens/authentification/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:esgi_tweet/screens/area/area_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class UsersRepository {
 
@@ -23,7 +25,7 @@ class UsersRepository {
         'birthDate': birthDateTS,
         'phoneNumber': phoneNumber,
         'address': address,
-        'photoURL': '',
+        'photoURL': null,
         'followers': [],
         'followings': [],
         'tweets': [],
@@ -50,10 +52,12 @@ class UsersRepository {
 
   signIn(email, password, context) async {
     try {
-      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: email,
           password: password
       );
+      BlocProvider.of<UsersBloc>(context).add(GetUser());
+      AreaScreen.navigateTo(context);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('Le mail ou le mot de passe est incorrect.');

@@ -42,9 +42,9 @@ class _TweetHomeScreenState extends State<TweetHomeScreen> {
           centerTitle: true,
           actions: [
             IconButton(
-              icon: const Icon(Icons.refresh),
+              icon: const Icon(Icons.logout),
               onPressed: () {
-                _onRefreshList(context);
+                _logout(context);
               },
             ),
           ],
@@ -121,5 +121,9 @@ class _TweetHomeScreenState extends State<TweetHomeScreen> {
     final postBloc = BlocProvider.of<TweetsBloc>(context);
     postBloc.add(GetAllTweets());
     _refreshController.refreshCompleted();
+  }
+
+  void _logout(BuildContext context) {
+    RepositoryProvider.of<UsersRepository>(context).signOut(context);
   }
 }

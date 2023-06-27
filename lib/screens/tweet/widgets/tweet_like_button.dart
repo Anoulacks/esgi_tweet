@@ -15,6 +15,7 @@ class TweetLikeButton extends StatefulWidget {
 class _TweetLikeButtonState extends State<TweetLikeButton> {
 
   bool isLiked = false;
+  int counterLikes = 0;
 
   @override
   void initState() {
@@ -23,16 +24,16 @@ class _TweetLikeButtonState extends State<TweetLikeButton> {
     if (initLiked == true) {
       isLiked = true;
     }
+    counterLikes = widget.likes?.length ?? 0;
   }
 
-  void _UpdateLike() async {
+  void _updateLike() async {
     setState(() {
       isLiked = !isLiked;
-
       if(isLiked) {
-        widget.likes?.length += 1;
+        counterLikes += 1;
       } else {
-        widget.likes?.length -= 1;
+        counterLikes -= 1;
       }
     });
   }
@@ -44,7 +45,7 @@ class _TweetLikeButtonState extends State<TweetLikeButton> {
         IconButton(
           onPressed: () {
             widget.callback(context);
-            _UpdateLike();
+            _updateLike();
           },
           icon: Icon(
             isLiked ? Icons.favorite : Icons.favorite_border,
@@ -52,7 +53,7 @@ class _TweetLikeButtonState extends State<TweetLikeButton> {
           iconSize: 18,
         ),
         Text(
-          '${widget.likes?.length ?? '0'}',
+          '$counterLikes',
           style: const TextStyle(
             color: Colors.black38,
             fontSize: 12.0,

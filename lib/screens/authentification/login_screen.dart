@@ -49,8 +49,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     String email = _emailController.text;
                     String password = _passwordController.text;
                     await RepositoryProvider.of<UsersRepository>(context).signIn(email, password, context);
-                    BlocProvider.of<UsersBloc>(context).add(GetUser());
-                    AreaScreen.navigateTo(context);
                   }
                 },
                 child: const Text('se connecter'),
