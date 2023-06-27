@@ -21,7 +21,17 @@ class TweetCard extends StatelessWidget {
     return Column(
       children: [
         ListTile(
-          leading: const CircleAvatar(child: Text('Z')),
+          leading: CircleAvatar(
+            backgroundImage: user.photoURL != null
+                ? Image.network(
+              user!.photoURL!,
+              fit: BoxFit.cover,
+            ).image
+                : Image.asset(
+              'assets/images/pp_twitter.jpeg',
+              fit: BoxFit.cover,
+            ).image,
+          ),
           title: Row(
             children: [
               Text(
