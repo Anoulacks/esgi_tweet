@@ -6,7 +6,7 @@ class UserApp {
   final String lastname;
   final String pseudo;
   final String email;
-  final String? photoURL;
+  String? photoURL;
   final Timestamp birthDate;
   final String phoneNumber;
   final String address;

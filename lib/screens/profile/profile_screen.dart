@@ -1,10 +1,16 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:esgi_tweet/blocs/users_bloc/users_bloc.dart';
 import 'package:esgi_tweet/models/user.dart';
 import 'package:esgi_tweet/utils/date_utils.dart';
 import 'package:esgi_tweet/utils/snackbar_utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../repositorys/image_repository.dart';
+import '../../widgets/image_picker.dart';
+
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -25,6 +31,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final _phoneNumberController = TextEditingController();
   final _addressController = TextEditingController();
   final _emailController = TextEditingController();
+  File? avatarImage;
 
   @override
   Widget build(BuildContext context) {
@@ -46,9 +53,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const ListTile(
-                      leading: CircleAvatar(child: Text('Z')),
+                    GestureDetector(
+                      onTap: () {
+                        _showImagePickerDialog();
+                      },
+                      child: CircleAvatar(
+                        backgroundImage: state.user?.photoURL != null
+                            ? Image.network(
+                              state.user!.photoURL!,
+                              fit: BoxFit.cover,
+                            ).image
+                            : avatarImage == null
+                            ? Image.asset(
+                              'assets/images/pp_twitter.jpeg',
+                              fit: BoxFit.cover,
+                            ).image
+                            : Image.file(
+                              avatarImage!,
+                              fit: BoxFit.cover,
+                            ).image,
                       ),
+                    ),
                     TextFormField(
                       controller: _lastnameController,
                       enabled: checkUpdate,
@@ -125,28 +150,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         return Builder(builder: (context) {
                           return Center(
                             child: ElevatedButton(
-                              onPressed: () {
-                                if (_profileForm.currentState!.validate()) {
-                                  final UserApp newUser = UserApp(
-                                      id: state.user?.id,
-                                      firstname: _firstnameController.text,
-                                      lastname: _lastnameController.text,
-                                      pseudo: _pseudoController.text,
-                                      birthDate: Timestamp.fromDate(
-                                          DateTime.parse(
-                                              _birthDateController.text)),
-                                      phoneNumber: _phoneNumberController.text,
-                                      address: _addressController.text,
-                                      photoURL: state.user?.photoURL,
-                                      email: _emailController.text,
-                                      followers: state.user?.followers,
-                                      followings: state.user?.followings
-                                  );
-
-                                  BlocProvider.of<UsersBloc>(context).add(
-                                      UpdateUser(newUser));
-                                }
-                              },
+                              onPressed: () => _handleUpdateUser(state),
                               child: const Text(
                                   'Enregistrer les Modifications'),
                             ),
@@ -182,4 +186,76 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
+
+  void _showImagePickerDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: Text('Modifier la photo de profil'),
+          children: [
+            SimpleDialogOption(
+              onPressed: () {
+                Navigator.pop(context);
+                _showImagePicker();
+                },
+              child: Text('Choisir une photo'),
+            ),
+            SimpleDialogOption(
+              onPressed: () {
+                setState(() {
+                  avatarImage = null;
+                  checkUpdate = true;
+                });
+                Navigator.pop(context);
+              },
+              child: Text('Retirer la photo actuelle'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showImagePicker() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return ImagePickerWidget(
+          callback: (File? image) {
+            setState(() {
+              avatarImage = image;
+              checkUpdate = true;
+            });
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> _handleUpdateUser(UsersState state) async {
+    if (_profileForm.currentState!.validate()) {
+      final UserApp newUser = UserApp(
+        id: state.user?.id,
+        firstname: _firstnameController.text,
+        lastname: _lastnameController.text,
+        pseudo: _pseudoController.text,
+        birthDate: Timestamp.fromDate(DateTime.parse(_birthDateController.text)),
+        phoneNumber: _phoneNumberController.text,
+        address: _addressController.text,
+        email: _emailController.text,
+        followers: state.user?.followers,
+        followings: state.user?.followings,
+      );
+
+      if(avatarImage != null) {
+        final urlImage = await RepositoryProvider.of<
+            ImageRepository>(context).uploadImage(avatarImage);
+        newUser.photoURL = urlImage;
+      }
+
+      BlocProvider.of<UsersBloc>(context).add(UpdateUser(newUser));
+    }
+  }
+
 }

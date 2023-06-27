@@ -4,7 +4,7 @@ import 'package:esgi_tweet/screens/tweet/tweet_add_screen.dart';
 import 'package:esgi_tweet/screens/tweet/widgets/tweet_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../models/user.dart';
 
 class TweetHomeScreen extends StatefulWidget {
@@ -21,6 +21,8 @@ class TweetHomeScreen extends StatefulWidget {
 }
 
 class _TweetHomeScreenState extends State<TweetHomeScreen> {
+  final _refreshController = RefreshController(initialRefresh: false);
+
   @override
   void initState() {
     super.initState();
@@ -69,33 +71,40 @@ class _TweetHomeScreenState extends State<TweetHomeScreen> {
                   );
                 }
 
-                return ListView.builder(
-                  itemCount: tweets.length,
-                  itemBuilder: (context, index) {
-                    final tweet = tweets[index];
-                    return FutureBuilder<UserApp>(
-                      future: RepositoryProvider.of<UsersRepository>(context)
-                          .getUserById(tweet.userId),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<UserApp> snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const CircularProgressIndicator();
-                        } else if (snapshot.hasError) {
-                          print(snapshot.error);
-                          return Text('Error: ${snapshot.error}');
-                        }
-                        UserApp userApp = snapshot.data!;
-                        if (snapshot.hasData) {
-                          return TweetCard(
-                            tweet: tweet,
-                            user: userApp,
-                          );
-                        }
-                        return Text('Error: pas de données');
-                      },
-                    );
+                return SmartRefresher(
+                  controller: _refreshController,
+                  enablePullDown: true,
+                  onRefresh: () async {
+                    _onRefreshList(context);
                   },
+                  child: ListView.builder(
+                    itemCount: tweets.length,
+                    itemBuilder: (context, index) {
+                      final tweet = tweets[index];
+                      return FutureBuilder<UserApp>(
+                        future: RepositoryProvider.of<UsersRepository>(context)
+                            .getUserById(tweet.userId),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<UserApp> snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const CircularProgressIndicator();
+                          } else if (snapshot.hasError) {
+                            print(snapshot.error);
+                            return Text('Error: ${snapshot.error}');
+                          }
+                          UserApp userApp = snapshot.data!;
+                          if (snapshot.hasData) {
+                            return TweetCard(
+                              tweet: tweet,
+                              user: userApp,
+                            );
+                          }
+                          return Text('Error: pas de données');
+                        },
+                      );
+                    },
+                  ),
                 );
             }
           },
@@ -111,5 +120,6 @@ class _TweetHomeScreenState extends State<TweetHomeScreen> {
   void _onRefreshList(BuildContext context) {
     final postBloc = BlocProvider.of<TweetsBloc>(context);
     postBloc.add(GetAllTweets());
+    _refreshController.refreshCompleted();
   }
 }

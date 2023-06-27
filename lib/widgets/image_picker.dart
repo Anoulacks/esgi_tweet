@@ -37,11 +37,11 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
       final image = await ImagePicker().pickImage(source: ImageSource.gallery, maxHeight: 100, maxWidth: 100);
       if(image == null) return;
       final imageTemp = File(image.path);
-      setState(() => {
-        this.image = imageTemp
+      setState(() {
+        this.image = imageTemp;
+        widget.callback(this.image);
       });
-      widget.callback(this.image);
-    } on PlatformException catch(e) {
+    } on PlatformException catch (e) {
       print('Failed to pick image: $e');
     }
   }
