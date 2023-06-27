@@ -50,6 +50,43 @@ class UsersRepository {
     }
   }
 
+  Future<void> updateUserFollow(String? targetUserId, String subscribedUserId, String key) async {
+    if (targetUserId != subscribedUserId) {
+      DocumentReference documentReference = usersCollection.doc(targetUserId);
+      return FirebaseFirestore.instance
+          .runTransaction((transaction) async {
+        DocumentSnapshot snapshot = await transaction.get(documentReference);
+
+        if (!snapshot.exists) {
+          throw Exception("$key does not exist!");
+        }
+
+        if (subscribedUserId == '') {
+          throw Exception("$key does not exist!");
+        }
+
+        final currentFollowings = List<String>.from((snapshot.get(key) ?? []));
+        if (!currentFollowings.contains(subscribedUserId)) {
+          currentFollowings.add(subscribedUserId);
+        } else {
+          currentFollowings.remove(subscribedUserId);
+        }
+
+        transaction.update(documentReference, {key: currentFollowings});
+      })
+          .then((value) => print("$key count updated to $value"))
+          .catchError((error) => print("Failed to update $key: $error"));
+    }
+  }
+
+  Future<void> updateUserFollowers(String? targetUserId, String subscribedUserId) async {
+    updateUserFollow(targetUserId, subscribedUserId, 'followers');
+  }
+
+  Future<void> updateUserFollowings(String? targetUserId, String subscribedUserId) async {
+    updateUserFollow(targetUserId, subscribedUserId, 'followings');
+  }
+
   signIn(email, password, context) async {
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(

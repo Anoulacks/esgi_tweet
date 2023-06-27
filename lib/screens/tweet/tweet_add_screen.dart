@@ -1,10 +1,10 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:esgi_tweet/blocs/users_bloc/users_bloc.dart';
 import 'package:esgi_tweet/models/tweet.dart';
 import 'package:esgi_tweet/repositorys/image_repository.dart';
 import 'package:esgi_tweet/repositorys/tweets_repository.dart';
-import 'package:esgi_tweet/repositorys/users_repository.dart';
 import 'package:esgi_tweet/widgets/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
