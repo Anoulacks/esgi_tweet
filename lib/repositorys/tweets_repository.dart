@@ -22,6 +22,25 @@ class TweetsRepository {
     return tweetsData;
   }
 
+  Future<List<Tweet>> getTweetsByUser(String userId) async {
+    final snapshot = await tweetsCollection
+        .where('userId', isEqualTo: userId)
+        .orderBy('date', descending: true)
+        .get();
+    final tweetsData = snapshot.docs.map((element) => Tweet.fromSnapshot(element)).toList();
+    return tweetsData;
+  }
+
+  Future<List<Tweet>> getLikedTweet(String userId) async {
+    final snapshot = await tweetsCollection
+        .where('likes', arrayContains: userId)
+        .orderBy('date', descending: true)
+        .get();
+
+    final tweetsData = snapshot.docs.map((element) => Tweet.fromSnapshot(element)).toList();
+    return tweetsData;
+  }
+
   Future<List<Tweet>> getTweetsDetail(tweet) async {
     final snapshot = await tweetsCollection
         .where('idTweetParent', isEqualTo: '${tweet.id}')
