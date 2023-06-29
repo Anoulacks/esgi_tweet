@@ -99,6 +99,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                                 fontSize: 23,
                               ),
                             ),
+                            const SizedBox(height: 8),
                             Text(
                               '@${state.user?.pseudo ?? ''}',
                               style: const TextStyle(
@@ -189,8 +190,13 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
           child: SizedBox(
             width: 300,
             height: 300,
-            child: Image.network(
+            child: user_pp != null
+                ? Image.network(
               user_pp ?? '',
+              fit: BoxFit.cover,
+            )
+                : Image.asset(
+              'assets/images/pp_twitter.jpeg',
               fit: BoxFit.cover,
             ),
           ),
