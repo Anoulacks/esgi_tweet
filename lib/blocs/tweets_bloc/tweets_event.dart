@@ -7,6 +7,16 @@ class GetAllTweets extends TweetsEvent {
   GetAllTweets();
 }
 
+class GetTweetsByUser extends TweetsEvent {
+  final String userId;
+  GetTweetsByUser(this.userId);
+}
+
+class GetLikedTweets extends TweetsEvent {
+  final String userId;
+  GetLikedTweets(this.userId);
+}
+
 class GetTweetsDetail extends TweetsEvent {
   final Tweet tweet;
 

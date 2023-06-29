@@ -38,5 +38,31 @@ class TweetsBloc extends Bloc<TweetsEvent, TweetsState> {
         throw Exception(error);
       }
     });
+
+    on<GetTweetsByUser>((event, emit) async {
+      emit(state.copyWith(status: TweetsStatus.loading));
+      await Future.delayed(const Duration(seconds: 1));
+      try {
+        final tweetsData = await repository.getTweetsByUser(event.userId);
+        emit(state.copyWith(status: TweetsStatus.success, tweets: tweetsData));
+      } catch (error) {
+        emit(state.copyWith(
+            status: TweetsStatus.error, error: error.toString()));
+        throw Exception(error);
+      }
+    });
+
+    on<GetLikedTweets>((event, emit) async {
+      emit(state.copyWith(status: TweetsStatus.loading));
+      await Future.delayed(const Duration(seconds: 1));
+      try {
+        final tweetsData = await repository.getLikedTweet(event.userId);
+        emit(state.copyWith(status: TweetsStatus.success, tweets: tweetsData));
+      } catch (error) {
+        emit(state.copyWith(
+            status: TweetsStatus.error, error: error.toString()));
+        throw Exception(error);
+      }
+    });
   }
 }
