@@ -1,37 +1,23 @@
-import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:esgi_tweet/blocs/users_bloc/users_bloc.dart';
-import 'package:esgi_tweet/models/user.dart';
-import 'package:esgi_tweet/repositorys/tweets_repository.dart';
 import 'package:esgi_tweet/screens/profile/users_list_screen.dart';
 import 'package:esgi_tweet/screens/profile/widgets/user_liked_tweets_list.dart';
 import 'package:esgi_tweet/screens/profile/widgets/user_tweets_list.dart';
-import 'package:esgi_tweet/utils/date_utils.dart';
-import 'package:esgi_tweet/utils/snackbar_utils.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
-import '../../blocs/tweets_bloc/tweets_bloc.dart';
-import '../../models/tweet.dart';
-import '../../repositorys/image_repository.dart';
-import '../../repositorys/users_repository.dart';
-import '../../widgets/image_picker.dart';
-import '../tweet/widgets/tweet_card.dart';
-import 'edit_profile_screen.dart';
+import '../../models/user.dart';
 
-class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+class UserSelectedProfilePage extends StatefulWidget {
+  final UserApp user;
+
+  const UserSelectedProfilePage({super.key, required this.user});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  State<StatefulWidget> createState() => _UserSelectedProfilePageState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProviderStateMixin{
+class _UserSelectedProfilePageState extends State<UserSelectedProfilePage> with SingleTickerProviderStateMixin {
+
   TabController? _tabController;
-  File? avatarImage;
-  String? user_pp;
 
   @override
   void initState() {
@@ -47,9 +33,12 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
 
   @override
   Widget build(BuildContext context) {
+    final userApp = widget.user;
     return Scaffold(
-        body: SafeArea(
-          child: BlocBuilder<UsersBloc, UsersState>(
+      appBar: AppBar(
+        title: Text(""),
+      ),
+      body: BlocBuilder<UsersBloc, UsersState>(
             builder: (context, state) {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,26 +53,18 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                           children: [
                             CircleAvatar(
                               radius: 35,
-                              backgroundImage: state.user?.photoURL != null
+                              backgroundImage: userApp.photoURL != null
                                   ? Image.network(
-                                      state.user!.photoURL!,
-                                      fit: BoxFit.cover,
-                                    ).image
-                                  : avatarImage == null
-                                      ? Image.asset(
-                                          'assets/images/pp_twitter.jpeg',
-                                          fit: BoxFit.cover,
-                                        ).image
-                                      : Image.file(
-                                          avatarImage!,
-                                          fit: BoxFit.cover,
-                                        ).image,
+                                userApp.photoURL!,
+                                fit: BoxFit.cover,
+                              ).image
+                                  : Image.asset(
+                                'assets/images/pp_twitter.jpeg',
+                                fit: BoxFit.cover,
+                              ).image,
                               child: GestureDetector(
                                 onTap: () {
-                                  setState(() {
-                                    user_pp = state.user?.photoURL;
-                                  });
-                                  _showUserPictureDialog();
+                                  _showUserPictureDialog(userApp);
                                 },
                               ),
                             ),
@@ -94,7 +75,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              state.user?.firstname ?? '',
+                              userApp.firstname ?? '',
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 23,
@@ -102,7 +83,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              '@${state.user?.pseudo ?? ''}',
+                              '@${userApp.pseudo ?? ''}',
                               style: const TextStyle(
                                 fontSize: 16,
                               ),
@@ -112,13 +93,8 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                         const Spacer(),
                         ElevatedButton(
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => EditProfileScreen()),
-                            );
                           },
-                          child: const Text('Modifier mon profil'),
+                          child: const Text("S'abonner"),
                           style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
@@ -132,34 +108,34 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                     color: Colors.blue,
                     padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                     child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              _showUserList(state.user?.followings, "Following");
-                            },
-                            child: Text(
-                              '${state.user?.followings?.length.toString() ?? ''} Following',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                              ),
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            _showUserList(userApp.followings, "Following");
+                          },
+                          child: Text(
+                            '${userApp.followings?.length.toString() ?? ''} Following',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
                             ),
                           ),
-                          const SizedBox(width: 20),
-                          GestureDetector(
-                            onTap: () {
-                              _showUserList(state.user?.followers, "Followers");
-                            },
-                            child: Text(
-                              '${state.user?.followers?.length.toString() ?? ''} Followers',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                              ),
+                        ),
+                        const SizedBox(width: 20),
+                        GestureDetector(
+                          onTap: () {
+                            _showUserList(userApp.followers, "Followers");
+                          },
+                          child: Text(
+                            '${userApp.followers?.length.toString() ?? ''} Followers',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
                             ),
                           ),
-                        ],
+                        ),
+                      ],
                     ),
                   ),
                   Expanded(
@@ -177,8 +153,8 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                           child: TabBarView(
                             controller: _tabController,
                             children: [
-                              UserTweetsList(userId: state.user?.id ?? ''),
-                              UserLikedTweetsList(userId: state.user?.id ?? '')
+                              UserTweetsList(userId: userApp.id ?? ''),
+                              UserLikedTweetsList(userId: userApp.id ?? '')
                             ],
                           ),
                         ),
@@ -189,11 +165,10 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
               );
             },
           ),
-        ),
-      );
+    );
   }
 
-  void _showUserPictureDialog() {
+  void _showUserPictureDialog(UserApp userApp) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -201,9 +176,9 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
           child: SizedBox(
             width: 300,
             height: 300,
-            child: user_pp != null
+            child: userApp.photoURL != null
                 ? Image.network(
-              user_pp ?? '',
+              userApp.photoURL!,
               fit: BoxFit.cover,
             )
                 : Image.asset(
