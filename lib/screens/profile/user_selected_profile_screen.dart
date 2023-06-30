@@ -195,7 +195,7 @@ class _UserSelectedProfilePageState extends State<UserSelectedProfilePage> with 
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => UsersListScreen(screen_title: title, userIds: userIds!),
+        builder: (context) => UsersListScreen(screenTitle: title, userIds: userIds!),
       ),
     );
   }

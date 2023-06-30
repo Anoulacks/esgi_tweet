@@ -220,7 +220,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => UsersListScreen(screen_title: title, userIds: userIds!),
+        builder: (context) => UsersListScreen(screenTitle: title, userIds: userIds!),
       ),
     );
   }

@@ -4,18 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../models/user.dart';
 import '../../repositorys/users_repository.dart';
+import '../search/profile_card_item.dart';
 
 class UsersListScreen extends StatelessWidget {
-  final String screen_title;
+  final String screenTitle;
   final List<dynamic> userIds;
 
-  const UsersListScreen({required this.userIds, required this.screen_title});
+  const UsersListScreen({super.key, required this.userIds, required this.screenTitle});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(screen_title),
+        title: Text(screenTitle),
       ),
       body: BlocBuilder<UsersBloc, UsersState>(
     builder: (context, state) {
@@ -51,22 +52,13 @@ class UsersListScreen extends StatelessWidget {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const CircularProgressIndicator();
                   } else if (snapshot.hasError) {
-                    print(snapshot.error);
                     return Text('Error: ${snapshot.error}');
                   }
-                  UserApp userApp = snapshot.data!;
                   if (snapshot.hasData) {
+                    UserApp userApp = snapshot.data!;
                     return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => UserSelectedProfilePage(user: userApp),
-                          ),
-                        );
-                      },
-                      child: ListTile(
-                        title: Text(userApp.pseudo),
+                      child: ProfileCardItem(
+                      user: userApp, onTap: () { _onCardTap(context, userApp); },
                       ),
                     );
                   }
@@ -77,6 +69,15 @@ class UsersListScreen extends StatelessWidget {
           );
       }
     },
+      ),
+    );
+  }
+
+  void _onCardTap(BuildContext context, UserApp userApp){
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => UserSelectedProfilePage(user: userApp),
       ),
     );
   }
