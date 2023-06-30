@@ -9,7 +9,7 @@ class SearchScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = UserApp(
-        firstname: "firstname",
+        firstname: "Zine",
         lastname: "lastname",
         pseudo: "pseudo",
         email: "email",
@@ -22,7 +22,7 @@ class SearchScreen extends StatelessWidget {
         itemCount: 23,
         itemBuilder: (item, index) {
           return ProfileCardItem(
-            user: user,
+            user: user, onTap: () { print("item ${index}"); },
           );
         });
   }
