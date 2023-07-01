@@ -9,6 +9,8 @@ import 'package:esgi_tweet/widgets/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../utils/shared_preferences.dart';
+
 class TweetAddScreen extends StatefulWidget {
   static const String routeName = '/TweetAdd';
 
@@ -31,13 +33,16 @@ class _TweetAddScreenState extends State<TweetAddScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkModeEnabled = UserSharedPreferences.isDarkModeEnabled();
+
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         elevation: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: isDarkModeEnabled ? Colors.black12 : Colors.white,
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(context).pop(), child: Text("Retour"),
+            onPressed: () => Navigator.of(context).pop(), child: const Text("Retour"),
           ),
           Spacer(),
           TextButton(

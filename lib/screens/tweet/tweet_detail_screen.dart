@@ -41,7 +41,7 @@ class _TweetDetailScreenState extends State<TweetDetailScreen> {
     return Builder(builder: (context) {
       return Scaffold(
         appBar: AppBar(
-          title: const Text('Tweet Detail'),
+          title: const Text('Tweet'),
           centerTitle: true,
         ),
         body: BlocBuilder<TweetsBloc, TweetsState>(
