@@ -80,6 +80,12 @@ class UsersRepository {
     return UserApp.fromSnapshot(document);
   }
 
+  Future<List<UserApp>> getUsers() async {
+    final snapshot = await usersCollection.get();
+    final usersData = snapshot.docs.map((element) => UserApp.fromSnapshot(element)).toList();
+    return usersData;
+  }
+
   signOut(context) async {
     await FirebaseAuth.instance.signOut();
     LoginScreen.navigateTo(context);

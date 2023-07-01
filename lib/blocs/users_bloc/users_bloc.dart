@@ -27,6 +27,19 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
       }
     });
 
+    on<GetUsers>((event, emit) async {
+      emit(state.copyWith(status: UsersStatus.loading));
+      await Future.delayed(const Duration(seconds: 1));
+      try {
+        final usersData = await repository.getUsers();
+        emit(state.copyWith(status: UsersStatus.success,users: usersData));
+      } catch (error) {
+        emit(
+            state.copyWith(status: UsersStatus.error, error: error.toString()));
+        throw Exception(error);
+      }
+    });
+
     on<UpdateUser>((event, emit) async {
       emit(state.copyWith(status: UsersStatus.loading));
       await Future.delayed(const Duration(seconds: 1));
