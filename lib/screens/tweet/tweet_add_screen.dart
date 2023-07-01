@@ -33,61 +33,87 @@ class _TweetAddScreenState extends State<TweetAddScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: BackButton(
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        title: const Text(
-          'Ajouter un Tweet',
-        ),
-        centerTitle: true,
+        elevation: 0,
+        backgroundColor: Colors.white,
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(), child: Text("Retour"),
+          ),
+          Spacer(),
+          TextButton(
+            onPressed: () async {
+              if (_tweetForm.currentState!.validate()) {
+                String? userUid =
+                    RepositoryProvider.of<UsersRepository>(context)
+                        .getCurrentUserID();
+                if (userUid != null) {
+                  if (image != null) {
+                    final urlImage =
+                        await RepositoryProvider.of<ImageRepository>(context)
+                            .uploadImage(image);
+                    Tweet tweet = Tweet(
+                        userId: userUid,
+                        body: _bodyController.text,
+                        image: urlImage,
+                        date: Timestamp.now(),
+                        idTweetParent: widget.tweetId);
+                    RepositoryProvider.of<TweetsRepository>(context)
+                        .addTweets(tweet);
+                  } else {
+                    Tweet tweet = Tweet(
+                        userId: userUid,
+                        body: _bodyController.text,
+                        date: Timestamp.now(),
+                        idTweetParent: widget.tweetId);
+                    RepositoryProvider.of<TweetsRepository>(context)
+                        .addTweets(tweet);
+                  }
+                }
+              }
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.blue, // Replace with your desired background color
+                borderRadius: BorderRadius.circular(10), // Replace with your desired border radius
+              ),
+              padding: EdgeInsets.all(10), // Optional: Add padding if needed
+              child: Text(
+                'Tweeter',
+                style: TextStyle(
+                  color: Colors.white, // Replace with your desired text color
+                ),
+              ),
+            ),
+          )
+        ],
       ),
       body: Form(
         key: _tweetForm,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextFormField(
-              controller: _bodyController,
-              decoration: const InputDecoration(labelText: 'Description'),
-            ),
-            ImagePickerWidget(callback: getImageEvent),
-            ElevatedButton(
-              onPressed: () async {
-                if (_tweetForm.currentState!.validate()) {
-                  String? userUid = RepositoryProvider.of<UsersRepository>(context).getCurrentUserID();
-                  if(userUid != null) {
-                    if(image != null) {
-                      final urlImage = await RepositoryProvider.of<
-                          ImageRepository>(context).uploadImage(image);
-                      Tweet tweet = Tweet(
-                          userId: userUid,
-                          body: _bodyController.text,
-                          image: urlImage,
-                          date: Timestamp.now(),
-                          idTweetParent: widget.tweetId
-                      );
-                      RepositoryProvider.of<TweetsRepository>(context)
-                          .addTweets(tweet);
-                    } else {
-                      Tweet tweet = Tweet(
-                          userId: userUid,
-                          body: _bodyController.text,
-                          date: Timestamp.now(),
-                          idTweetParent: widget.tweetId
-                      );
-                      RepositoryProvider.of<TweetsRepository>(context)
-                          .addTweets(tweet);
-                    }
-                  }
-                }
-              },
-              child: const Text('Publier'),
-            ),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(18.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height / 3,
+                child: TextFormField(
+                  maxLines: null,
+                  controller: _bodyController,
+                  decoration: const InputDecoration(
+                      contentPadding: EdgeInsets.all(10.0),
+                      border: InputBorder.none,
+                      labelText: 'Quoi de neuf ?'),
+                ),
+              ),
+              ImagePickerWidget(callback: getImageEvent),
+            ],
+          ),
         ),
       ),
     );
   }
+
   void getImageEvent(File? file) {
     image = file;
   }
