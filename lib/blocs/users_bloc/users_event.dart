@@ -7,6 +7,10 @@ class GetUser extends UsersEvent {
   GetUser();
 }
 
+class GetUsers extends UsersEvent {
+  GetUsers();
+}
+
 class UpdateUser extends UsersEvent {
   final UserApp userEvent;
 
