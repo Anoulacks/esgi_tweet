@@ -1,5 +1,7 @@
 import 'package:esgi_tweet/blocs/users_bloc/users_bloc.dart';
+import 'package:esgi_tweet/repositorys/users_repository.dart';
 import 'package:esgi_tweet/screens/profile/users_list_screen.dart';
+import 'package:esgi_tweet/screens/profile/widgets/subscribe_button.dart';
 import 'package:esgi_tweet/screens/profile/widgets/user_liked_tweets_list.dart';
 import 'package:esgi_tweet/screens/profile/widgets/user_tweets_list.dart';
 import 'package:flutter/material.dart';
@@ -19,11 +21,13 @@ class UserSelectedProfilePage extends StatefulWidget {
 class _UserSelectedProfilePageState extends State<UserSelectedProfilePage> with SingleTickerProviderStateMixin {
 
   TabController? _tabController;
+  int counterFollowers = 0;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    counterFollowers = widget.user.followers?.length ?? 0;
   }
 
   @override
@@ -94,16 +98,9 @@ class _UserSelectedProfilePageState extends State<UserSelectedProfilePage> with 
                           ],
                         ),
                         const Spacer(),
-                        ElevatedButton(
-                          onPressed: () {
-                          },
-                          child: const Text("S'abonner"),
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                          ),
-                        ),
+                        SubscribeButton(callback: (value) {
+                          _subscribeToUser(context, value);
+                        }, userId: widget.user.id,)
                       ],
                     ),
                   ),
@@ -115,10 +112,10 @@ class _UserSelectedProfilePageState extends State<UserSelectedProfilePage> with 
                       children: [
                         GestureDetector(
                           onTap: () {
-                            _showUserList(userApp.followings, "Following");
+                            _showUserList(userApp.followings, "Abonnement");
                           },
                           child: Text(
-                            '${userApp.followings?.length.toString() ?? ''} Following',
+                            '${userApp.followings?.length.toString() ?? ''} Abonnement',
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18,
@@ -128,10 +125,10 @@ class _UserSelectedProfilePageState extends State<UserSelectedProfilePage> with 
                         const SizedBox(width: 20),
                         GestureDetector(
                           onTap: () {
-                            _showUserList(userApp.followers, "Followers");
+                            _showUserList(userApp.followers, "Abonnés");
                           },
                           child: Text(
-                            '${userApp.followers?.length.toString() ?? ''} Followers',
+                            '$counterFollowers Abonnés',
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18,
@@ -202,6 +199,24 @@ class _UserSelectedProfilePageState extends State<UserSelectedProfilePage> with 
         builder: (context) => UsersListScreen(screenTitle: title, userIds: userIds!),
       ),
     );
+  }
+
+  void _subscribeToUser(context, checkFollowing) {
+    setState(() {
+      if (checkFollowing) {
+        counterFollowers += 1;
+      } else {
+        counterFollowers -= 1;
+      }
+    });
+
+    final userState = BlocProvider.of<UsersBloc>(context).state.user?.id;
+    RepositoryProvider.of<UsersRepository>(context).updateUserFollowers(widget.user.id, userState!);
+    RepositoryProvider.of<UsersRepository>(context).updateUserFollowings(userState, widget.user.id!).then((value) {
+      if (value == true) {
+        BlocProvider.of<UsersBloc>(context).add(GetUser());
+      }
+    });
   }
 
 }

@@ -50,7 +50,7 @@ class UsersRepository {
     }
   }
 
-  Future<void> updateUserFollow(String? targetUserId, String subscribedUserId, String key) async {
+  Future<bool> updateUserFollow(String? targetUserId, String subscribedUserId, String key) async {
     if (targetUserId != subscribedUserId) {
       DocumentReference documentReference = usersCollection.doc(targetUserId);
       return FirebaseFirestore.instance
@@ -74,17 +74,19 @@ class UsersRepository {
 
         transaction.update(documentReference, {key: currentFollowings});
       })
-          .then((value) => print("$key count updated to $value"))
-          .catchError((error) => print("Failed to update $key: $error"));
+          .then((value) => true)
+          .catchError((error) => false);
+    } else {
+      return false;
     }
   }
 
-  Future<void> updateUserFollowers(String? targetUserId, String subscribedUserId) async {
-    updateUserFollow(targetUserId, subscribedUserId, 'followers');
+  Future<bool> updateUserFollowers(String? targetUserId, String subscribedUserId) async {
+    return updateUserFollow(targetUserId, subscribedUserId, 'followers');
   }
 
-  Future<void> updateUserFollowings(String? targetUserId, String subscribedUserId) async {
-    updateUserFollow(targetUserId, subscribedUserId, 'followings');
+  Future<bool> updateUserFollowings(String? targetUserId, String subscribedUserId) async {
+    return updateUserFollow(targetUserId, subscribedUserId, 'followings');
   }
 
   signIn(email, password, context) async {
