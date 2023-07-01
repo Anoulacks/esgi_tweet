@@ -2,6 +2,8 @@ import 'package:esgi_tweet/repositorys/users_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../utils/shared_preferences.dart';
+
 class TweetLikeButton extends StatefulWidget {
   final List<dynamic>? likes;
   final Function callback;
@@ -40,6 +42,8 @@ class _TweetLikeButtonState extends State<TweetLikeButton> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkModeEnabled = UserSharedPreferences.isDarkModeEnabled();
+
     return Row(
       children: [
         IconButton(
@@ -54,8 +58,8 @@ class _TweetLikeButtonState extends State<TweetLikeButton> {
         ),
         Text(
           '$counterLikes',
-          style: const TextStyle(
-            color: Colors.black38,
+          style: TextStyle(
+            color: isDarkModeEnabled ? Colors.white : Colors.black,
             fontSize: 12.0,
           ),)
       ],

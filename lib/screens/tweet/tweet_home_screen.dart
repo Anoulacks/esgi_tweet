@@ -5,7 +5,9 @@ import 'package:esgi_tweet/screens/tweet/widgets/tweet_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import '../../main.dart';
 import '../../models/user.dart';
+import '../../utils/shared_preferences.dart';
 
 class TweetHomeScreen extends StatefulWidget {
   static const String routeName = '/TweetHome';
@@ -40,6 +42,20 @@ class _TweetHomeScreenState extends State<TweetHomeScreen> {
         appBar: AppBar(
           title: const Text('ESGI Tweet'),
           centerTitle: true,
+          leading: IconButton(
+            icon: Icon(
+              UserSharedPreferences.isDarkModeEnabled()
+                  ? Icons.light_mode
+                  : Icons.dark_mode,
+            ),
+            onPressed: () {
+              bool isDarkModeEnabled = UserSharedPreferences.isDarkModeEnabled();
+              UserSharedPreferences.setDarkMode(!isDarkModeEnabled);
+              setState(() {
+                runApp(MyApp());
+              });
+            },
+          ),
           actions: [
             IconButton(
               icon: const Icon(Icons.logout),
@@ -111,6 +127,7 @@ class _TweetHomeScreenState extends State<TweetHomeScreen> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () => {TweetAddScreen.navigateTo(context, '')},
+          backgroundColor: Colors.blue,
           child: const Icon(Icons.add),
         ),
       );

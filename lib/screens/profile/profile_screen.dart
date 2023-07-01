@@ -1,24 +1,11 @@
 import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:esgi_tweet/blocs/users_bloc/users_bloc.dart';
-import 'package:esgi_tweet/models/user.dart';
-import 'package:esgi_tweet/repositorys/tweets_repository.dart';
 import 'package:esgi_tweet/screens/profile/users_list_screen.dart';
 import 'package:esgi_tweet/screens/profile/widgets/user_liked_tweets_list.dart';
 import 'package:esgi_tweet/screens/profile/widgets/user_tweets_list.dart';
-import 'package:esgi_tweet/utils/date_utils.dart';
-import 'package:esgi_tweet/utils/snackbar_utils.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
-import '../../blocs/tweets_bloc/tweets_bloc.dart';
-import '../../models/tweet.dart';
-import '../../repositorys/image_repository.dart';
-import '../../repositorys/users_repository.dart';
-import '../../widgets/image_picker.dart';
-import '../tweet/widgets/tweet_card.dart';
+import '../../utils/shared_preferences.dart';
 import 'edit_profile_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -47,6 +34,8 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
 
   @override
   Widget build(BuildContext context) {
+    final isDarkModeEnabled = UserSharedPreferences.isDarkModeEnabled();
+
     return Scaffold(
         body: SafeArea(
           child: BlocBuilder<UsersBloc, UsersState>(
@@ -55,7 +44,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    color: Colors.blue,
+                    color: isDarkModeEnabled ? Colors.black12 : Colors.blue,
                     padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -129,7 +118,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                     ),
                   ),
                   Container(
-                    color: Colors.blue,
+                    color: isDarkModeEnabled ? Colors.black12 : Colors.blue,
                     padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                     child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -167,7 +156,8 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                       children: [
                         TabBar(
                           controller: _tabController,
-                          labelColor: Colors.black,
+                          indicatorColor: Colors.blue,
+                          labelColor: isDarkModeEnabled ? Colors.white : Colors.black,
                           tabs: const [
                             Tab(text: 'Tweets'),
                             Tab(text: 'Likes'),

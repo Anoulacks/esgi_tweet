@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class UserSharedPreferences {
 
   static late SharedPreferences preferences;
+  static const _darkModeKey = 'darkMode';
 
   static Future initPref() async => preferences = await SharedPreferences.getInstance();
 
@@ -15,4 +16,11 @@ class UserSharedPreferences {
 
   static removePreferences() async => await preferences.clear();
 
+  static bool isDarkModeEnabled() {
+    return UserSharedPreferences.preferences.getBool(_darkModeKey) ?? false;
+  }
+
+  static Future<void> setDarkMode(bool value) async {
+    await UserSharedPreferences.preferences.setBool(_darkModeKey, value);
+  }
 }

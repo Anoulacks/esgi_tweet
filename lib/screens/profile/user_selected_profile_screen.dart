@@ -5,6 +5,7 @@ import 'package:esgi_tweet/screens/profile/widgets/user_tweets_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../models/user.dart';
+import '../../utils/shared_preferences.dart';
 
 class UserSelectedProfilePage extends StatefulWidget {
   final UserApp user;
@@ -33,6 +34,8 @@ class _UserSelectedProfilePageState extends State<UserSelectedProfilePage> with 
 
   @override
   Widget build(BuildContext context) {
+    final isDarkModeEnabled = UserSharedPreferences.isDarkModeEnabled();
+
     final userApp = widget.user;
     return Scaffold(
       appBar: AppBar(
@@ -44,7 +47,7 @@ class _UserSelectedProfilePageState extends State<UserSelectedProfilePage> with 
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    color: Colors.blue,
+                    color: isDarkModeEnabled ? Colors.black12 : Colors.blue,
                     padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -105,7 +108,7 @@ class _UserSelectedProfilePageState extends State<UserSelectedProfilePage> with 
                     ),
                   ),
                   Container(
-                    color: Colors.blue,
+                    color: isDarkModeEnabled ? Colors.black12 : Colors.blue,
                     padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -143,7 +146,8 @@ class _UserSelectedProfilePageState extends State<UserSelectedProfilePage> with 
                       children: [
                         TabBar(
                           controller: _tabController,
-                          labelColor: Colors.black,
+                          indicatorColor: Colors.blue,
+                          labelColor: isDarkModeEnabled ? Colors.white : Colors.black,
                           tabs: const [
                             Tab(text: 'Tweets'),
                             Tab(text: 'Likes'),

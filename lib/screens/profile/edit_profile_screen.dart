@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:esgi_tweet/blocs/users_bloc/users_bloc.dart';
 import 'package:esgi_tweet/models/user.dart';
+import 'package:esgi_tweet/screens/profile/profile_screen.dart';
 import 'package:esgi_tweet/utils/date_utils.dart';
 import 'package:esgi_tweet/utils/snackbar_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -172,6 +173,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => {_enableUpdate()},
+        backgroundColor: Colors.blue,
         child: const Icon(Icons.edit),
       ),
     );
