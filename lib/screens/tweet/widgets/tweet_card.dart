@@ -16,7 +16,8 @@ class TweetCard extends StatelessWidget {
   final Tweet tweet;
   final UserApp user;
 
-  const TweetCard({Key? key, required this.tweet,required this.user}) : super(key: key);
+  const TweetCard({Key? key, required this.tweet, required this.user})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,24 +28,27 @@ class TweetCard extends StatelessWidget {
         ListTile(
           leading: CircleAvatar(
             backgroundImage: user.photoURL != null
-                ? Image.network(
+                ? Image
+                .network(
               user!.photoURL!,
               fit: BoxFit.cover,
-            ).image
-                : Image.asset(
+            )
+                .image
+                : Image
+                .asset(
               'assets/images/pp_twitter.jpeg',
               fit: BoxFit.cover,
-            ).image,
+            )
+                .image,
           ),
           title: Row(
             children: [
               Text(
-                  user.firstname,
-                  style: TextStyle(
-                      color: isDarkModeEnabled ? Colors.white : Colors.black,
+                user.firstname,
+                style: TextStyle(
+                    color: isDarkModeEnabled ? Colors.white : Colors.black,
                     fontSize: 15.0,
-                    fontWeight: FontWeight.bold
-                ),
+                    fontWeight: FontWeight.bold),
               ),
               Text(
                 '@${user.pseudo} | ',
@@ -76,19 +80,50 @@ class TweetCard extends StatelessWidget {
                   ),
                 ),
               ),
-              tweet.image != null ? Image.network(tweet.image!) : const Text(''),
+              tweet.image != null
+                  ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10.0),
+                        child: AspectRatio(
+                          aspectRatio: 16 / 9,
+                          child: GestureDetector(
+                            onTap: () =>
+                                _showUserPictureDialog(context, tweet.image!),
+                            child: Image.network(
+                              tweet.image!,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              )
+                  : const Text(''),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  TweetButton(icon: Icons.chat, value: '${tweet.comments != null ? tweet.comments?.length : '0'}', callback: _addComment,),
-                  TweetLikeButton(likes: tweet.likes, callback: _updateLike,),
+                  TweetButton(
+                    icon: Icons.chat,
+                    value:
+                    '${tweet.comments != null ? tweet.comments?.length : '0'}',
+                    callback: _addComment,
+                  ),
+                  TweetLikeButton(
+                    likes: tweet.likes,
+                    callback: _updateLike,
+                  ),
                 ],
               ),
             ],
           ),
-          onTap: () => {
-            TweetDetailScreen.navigateTo(context, tweet)
-          },
+          onTap: () => {TweetDetailScreen.navigateTo(context, tweet)},
         ),
         const Divider(),
       ],
@@ -96,11 +131,27 @@ class TweetCard extends StatelessWidget {
   }
 
   void _updateLike(context) {
-    final userId = RepositoryProvider.of<UsersRepository>(context).getCurrentUserID();
-    RepositoryProvider.of<TweetsRepository>(context).updateLikeTweet(tweet.id, userId);
+    final userId =
+    RepositoryProvider.of<UsersRepository>(context).getCurrentUserID();
+    RepositoryProvider.of<TweetsRepository>(context)
+        .updateLikeTweet(tweet.id, userId);
   }
 
   void _addComment(context) {
     TweetAddScreen.navigateTo(context, tweet.id);
+  }
+
+  void _showUserPictureDialog(BuildContext context, String imageURL) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+              child: Image.network(
+                imageURL ?? '',
+                fit: BoxFit.cover,
+              )
+        );
+      },
+    );
   }
 }
