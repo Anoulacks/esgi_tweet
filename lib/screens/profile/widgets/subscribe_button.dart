@@ -1,4 +1,6 @@
+import 'package:esgi_tweet/blocs/users_bloc/users_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SubscribeButton extends StatefulWidget {
   final Function() callback;
@@ -11,8 +13,6 @@ class SubscribeButton extends StatefulWidget {
 
 class _SubscribeButtonState extends State<SubscribeButton> {
 
-  bool checkFollowing = false;
-
   @override
   void initState() {
     super.initState();
@@ -20,9 +20,21 @@ class _SubscribeButtonState extends State<SubscribeButton> {
 
   @override
   Widget build(BuildContext context) {
+    List<dynamic>? followingsArray = BlocProvider
+        .of<UsersBloc>(context)
+        .state
+        .user
+        ?.followings;
+    bool? checkFollowing = followingsArray?.contains(BlocProvider
+        .of<UsersBloc>(context)
+        .state
+        .user
+        ?.id ?? false);
     return ElevatedButton(
       onPressed: () {
-        checkFollowing = !checkFollowing;
+        setState(() {
+          checkFollowing = checkFollowing != null ? true : false;
+        });
         widget.callback();
       },
       style: ElevatedButton.styleFrom(
@@ -30,7 +42,10 @@ class _SubscribeButtonState extends State<SubscribeButton> {
           borderRadius: BorderRadius.circular(20),
         ),
       ),
-      child: const Text('Modifier mon profil'),
+      child:
+      checkFollowing != null && checkFollowing == true ?
+      const Text('Se desabonner')
+      : const Text("Suivre"),
     );
   }
 }
