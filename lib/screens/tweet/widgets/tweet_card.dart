@@ -10,6 +10,8 @@ import 'package:esgi_tweet/utils/date_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../utils/shared_preferences.dart';
+
 class TweetCard extends StatelessWidget {
   final Tweet tweet;
   final UserApp user;
@@ -18,6 +20,8 @@ class TweetCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkModeEnabled = UserSharedPreferences.isDarkModeEnabled();
+
     return Column(
       children: [
         ListTile(
@@ -36,8 +40,8 @@ class TweetCard extends StatelessWidget {
             children: [
               Text(
                   user.firstname,
-                  style: const TextStyle(
-                    color: Colors.black,
+                  style: TextStyle(
+                      color: isDarkModeEnabled ? Colors.white : Colors.black,
                     fontSize: 15.0,
                     fontWeight: FontWeight.bold
                 ),
@@ -66,8 +70,8 @@ class TweetCard extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 5.0),
                 child: Text(
                   tweet.body,
-                  style: const TextStyle(
-                    color: Colors.black,
+                  style: TextStyle(
+                    color: isDarkModeEnabled ? Colors.white : Colors.black,
                     fontSize: 14.0,
                   ),
                 ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../utils/shared_preferences.dart';
+
 class TweetButton extends StatelessWidget {
   final IconData icon;
   final String value;
@@ -9,6 +11,8 @@ class TweetButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkModeEnabled = UserSharedPreferences.isDarkModeEnabled();
+
     return Row(
       children: [
         IconButton(
@@ -21,9 +25,9 @@ class TweetButton extends StatelessWidget {
         ),
         Text(
           value,
-          style: const TextStyle(
-          color: Colors.black38,
-          fontSize: 12.0,
+          style: TextStyle(
+            color: isDarkModeEnabled ? Colors.white : Colors.black,
+            fontSize: 12.0,
         ),)
       ],
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../models/user.dart';
+import '../../utils/shared_preferences.dart';
 
 class ProfileCardItem extends StatelessWidget {
   final UserApp user;
@@ -14,6 +15,8 @@ class ProfileCardItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkModeEnabled = UserSharedPreferences.isDarkModeEnabled();
+
     return GestureDetector(
       onTap: onTap,
       child: Row(
@@ -39,16 +42,16 @@ class ProfileCardItem extends StatelessWidget {
             children: [
               Text(
                 "${user.firstname} ${user.lastname}",
-                style: const TextStyle(
-                  color: Colors.black54,
+                style: TextStyle(
+                  color: isDarkModeEnabled ? Colors.white : Colors.black,
                   fontWeight: FontWeight.bold,
                   fontSize: 12,
                 ),
               ),
               Text(
                 '@${user.pseudo}',
-                style: const TextStyle(
-                  color: Colors.grey,
+                style: TextStyle(
+                  color: isDarkModeEnabled ? Colors.white : Colors.grey,
                   fontWeight: FontWeight.w200,
                   fontSize: 12,
                 ),

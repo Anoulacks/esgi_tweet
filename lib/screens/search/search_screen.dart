@@ -36,9 +36,8 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextField(
+        automaticallyImplyLeading: false,
+        title: TextField(
               controller: _textFieldController,
               onChanged: (value) {
                 setState(() {});
@@ -54,7 +53,6 @@ class _SearchScreenState extends State<SearchScreen> {
                 suffixIcon: Icon(Icons.search),
               ),
             ),
-        ),
       ),
       body: BlocBuilder<UsersBloc, UsersState>(
         builder: (context, state) {

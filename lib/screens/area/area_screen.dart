@@ -39,7 +39,7 @@ class _AreaScreenState extends State<AreaScreen> {
       bottomNavigationBar: BottomNavigationBar(
         onTap: onTap,
         currentIndex: currentIndex,
-        selectedItemColor: const Color(0xFF0B004D),
+        selectedItemColor: Colors.blue,
         unselectedItemColor: Colors.grey.withOpacity(0.5),
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Accueil'),
