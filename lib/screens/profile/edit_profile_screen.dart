@@ -8,7 +8,9 @@ import 'package:esgi_tweet/utils/snackbar_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../repositorys/image_repository.dart';
 import '../../widgets/image_picker.dart';
 
@@ -198,14 +200,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       context: context,
       builder: (BuildContext context) {
         return SimpleDialog(
-          title: Text('Modifier la photo de profil'),
+          title: const Text('Modifier la photo de profil'),
           children: [
             SimpleDialogOption(
               onPressed: () {
                 Navigator.pop(context);
                 _showImagePicker();
               },
-              child: Text('Choisir une photo'),
+              child: const Text('Choisir une photo'),
             ),
             SimpleDialogOption(
               onPressed: () {
@@ -215,7 +217,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 });
                 Navigator.pop(context);
               },
-              child: Text('Retirer la photo actuelle'),
+              child: const Text('Retirer la photo actuelle'),
             ),
           ],
         );
@@ -223,20 +225,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
-  void _showImagePicker() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return ImagePickerWidget(
-          callback: (File? image) {
-            setState(() {
-              avatarImage = image;
-              checkUpdate = true;
-            });
-          },
-        );
-      },
-    );
+  void _showImagePicker() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+
+    if(image != null){
+      setState(() {
+        avatarImage = File(image.path);
+        checkUpdate = true;
+      });
+    }
   }
 
   Future<void> _handleUpdateUser(UsersState state) async {
