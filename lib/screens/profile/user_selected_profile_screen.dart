@@ -119,10 +119,10 @@ class _UserSelectedProfilePageState extends State<UserSelectedProfilePage> with 
                       children: [
                         GestureDetector(
                           onTap: () {
-                            _showUserList(userApp.followings, "Abonnement");
+                            _showUserList(userApp.followings, "Abonnement(s)");
                           },
                           child: Text(
-                            '${userApp.followings?.length.toString() ?? ''} Abonnement',
+                            '${userApp.followings?.length.toString() ?? ''} Abonnement(s)',
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18,
@@ -132,10 +132,10 @@ class _UserSelectedProfilePageState extends State<UserSelectedProfilePage> with 
                         const SizedBox(width: 20),
                         GestureDetector(
                           onTap: () {
-                            _showUserList(userApp.followers, "Abonnés");
+                            _showUserList(userApp.followers, "Abonné(s)");
                           },
                           child: Text(
-                            '$counterFollowers Abonnés',
+                            '$counterFollowers Abonné(s)',
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18,
