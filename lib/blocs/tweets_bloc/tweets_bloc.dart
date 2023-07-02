@@ -44,7 +44,7 @@ class TweetsBloc extends Bloc<TweetsEvent, TweetsState> {
       await Future.delayed(const Duration(seconds: 1));
       try {
         final tweetsData = await repository.getTweetsByUser(event.userId);
-        emit(state.copyWith(status: TweetsStatus.success, tweets: tweetsData));
+        emit(state.copyWith(status: TweetsStatus.success, tweetsProfile: tweetsData));
       } catch (error) {
         emit(state.copyWith(
             status: TweetsStatus.error, error: error.toString()));
@@ -57,7 +57,7 @@ class TweetsBloc extends Bloc<TweetsEvent, TweetsState> {
       await Future.delayed(const Duration(seconds: 1));
       try {
         final tweetsData = await repository.getLikedTweet(event.userId);
-        emit(state.copyWith(status: TweetsStatus.success, tweets: tweetsData));
+        emit(state.copyWith(status: TweetsStatus.success, tweetsProfile: tweetsData));
       } catch (error) {
         emit(state.copyWith(
             status: TweetsStatus.error, error: error.toString()));

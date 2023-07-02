@@ -81,8 +81,8 @@ class _TweetAddScreenState extends State<TweetAddScreen> {
                 color: Colors.blue, // Replace with your desired background color
                 borderRadius: BorderRadius.circular(10), // Replace with your desired border radius
               ),
-              padding: EdgeInsets.all(10), // Optional: Add padding if needed
-              child: Text(
+              padding: const EdgeInsets.all(10), // Optional: Add padding if needed
+              child: const Text(
                 'Tweeter',
                 style: TextStyle(
                   color: Colors.white, // Replace with your desired text color

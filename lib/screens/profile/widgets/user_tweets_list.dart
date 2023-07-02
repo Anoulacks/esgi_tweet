@@ -29,7 +29,7 @@ class UserTweetsList extends StatelessWidget {
               child: Text(state.error),
             );
           case TweetsStatus.success:
-            final tweets = state.tweets;
+            final tweets = state.tweetsProfile;
 
             if (tweets.isEmpty) {
               return const Center(

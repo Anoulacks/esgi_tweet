@@ -9,7 +9,14 @@ import '../../utils/shared_preferences.dart';
 import 'edit_profile_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  static const String routeName = '/Profile';
+  final bool checkBackButton;
+
+  static void navigateTo(BuildContext context, bool checkBackButton) {
+    Navigator.of(context).pushNamed(routeName, arguments: checkBackButton);
+  }
+
+  const ProfileScreen({Key? key, this.checkBackButton = false}) : super(key: key);
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -37,6 +44,9 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
     final isDarkModeEnabled = UserSharedPreferences.isDarkModeEnabled();
 
     return Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: widget.checkBackButton,
+        ),
         body: SafeArea(
           child: BlocBuilder<UsersBloc, UsersState>(
             builder: (context, state) {
@@ -125,10 +135,10 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                         children: [
                           GestureDetector(
                             onTap: () {
-                              _showUserList(state.user?.followings, "Following");
+                              _showUserList(state.user?.followings, "Abonnement(s)");
                             },
                             child: Text(
-                              '${state.user?.followings?.length.toString() ?? ''} Following',
+                              '${state.user?.followings?.length.toString() ?? ''} Abonnement(s)',
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18,
@@ -138,10 +148,10 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                           const SizedBox(width: 20),
                           GestureDetector(
                             onTap: () {
-                              _showUserList(state.user?.followers, "Followers");
+                              _showUserList(state.user?.followers, "Abonné(s)");
                             },
                             child: Text(
-                              '${state.user?.followers?.length.toString() ?? ''} Followers',
+                              '${state.user?.followers?.length.toString() ?? ''} Abonné(s)',
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18,

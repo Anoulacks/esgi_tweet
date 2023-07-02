@@ -1,7 +1,10 @@
+import 'package:esgi_tweet/blocs/users_bloc/users_bloc.dart';
 import 'package:esgi_tweet/models/tweet.dart';
 import 'package:esgi_tweet/models/user.dart';
 import 'package:esgi_tweet/repositorys/tweets_repository.dart';
 import 'package:esgi_tweet/repositorys/users_repository.dart';
+import 'package:esgi_tweet/screens/profile/profile_screen.dart';
+import 'package:esgi_tweet/screens/profile/user_selected_profile_screen.dart';
 import 'package:esgi_tweet/screens/tweet/tweet_add_screen.dart';
 import 'package:esgi_tweet/screens/tweet/tweet_detail_screen.dart';
 import 'package:esgi_tweet/screens/tweet/widgets/tweet_button.dart';
@@ -26,20 +29,25 @@ class TweetCard extends StatelessWidget {
     return Column(
       children: [
         ListTile(
-          leading: CircleAvatar(
-            backgroundImage: user.photoURL != null
-                ? Image
-                .network(
-              user!.photoURL!,
-              fit: BoxFit.cover,
-            )
-                .image
-                : Image
-                .asset(
-              'assets/images/pp_twitter.jpeg',
-              fit: BoxFit.cover,
-            )
-                .image,
+          leading: GestureDetector(
+            onTap: () {
+              _goToProfile(context, user);
+            },
+            child: CircleAvatar(
+              backgroundImage: user.photoURL != null
+                  ? Image
+                  .network(
+                user!.photoURL!,
+                fit: BoxFit.cover,
+              )
+                  .image
+                  : Image
+                  .asset(
+                'assets/images/pp_twitter.jpeg',
+                fit: BoxFit.cover,
+              )
+                  .image,
+            ),
           ),
           title: Row(
             children: [
@@ -128,6 +136,14 @@ class TweetCard extends StatelessWidget {
         const Divider(),
       ],
     );
+  }
+
+  void _goToProfile(BuildContext context, UserApp userApp) {
+    if (userApp.id == BlocProvider.of<UsersBloc>(context).state.user?.id) {
+      ProfileScreen.navigateTo(context, true);
+    } else {
+      UserSelectedProfilePage.navigateTo(context, userApp);
+    }
   }
 
   void _updateLike(context) {
