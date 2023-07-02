@@ -74,11 +74,6 @@ class UsersListScreen extends StatelessWidget {
   }
 
   void _onCardTap(BuildContext context, UserApp userApp){
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => UserSelectedProfilePage(user: userApp),
-      ),
-    );
+    UserSelectedProfilePage.navigateTo(context, userApp);
   }
 }

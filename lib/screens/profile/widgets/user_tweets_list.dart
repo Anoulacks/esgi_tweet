@@ -1,3 +1,4 @@
+import 'package:esgi_tweet/blocs/users_bloc/users_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../blocs/tweets_bloc/tweets_bloc.dart';
@@ -29,7 +30,12 @@ class UserTweetsList extends StatelessWidget {
               child: Text(state.error),
             );
           case TweetsStatus.success:
-            final tweets = state.tweetsProfile;
+            late final tweets;
+            if (userId == BlocProvider.of<UsersBloc>(context).state.user?.id) {
+              tweets = state.tweetsProfile;
+            } else {
+              tweets = state.tweetsProfileSelected;
+            }
 
             if (tweets.isEmpty) {
               return const Center(

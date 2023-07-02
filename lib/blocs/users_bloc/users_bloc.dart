@@ -15,7 +15,6 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
   UsersBloc({required this.repository}) : super(const UsersState()) {
     on<GetUser>((event, emit) async {
       emit(state.copyWith(status: UsersStatus.loading));
-      await Future.delayed(const Duration(seconds: 1));
       try {
         final userId = repository.getCurrentUserID();
         final userData = await repository.getUserById(userId);
@@ -29,7 +28,6 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
 
     on<GetUsers>((event, emit) async {
       emit(state.copyWith(status: UsersStatus.loading));
-      await Future.delayed(const Duration(seconds: 1));
       try {
         final usersData = await repository.getUsers();
         emit(state.copyWith(status: UsersStatus.success,users: usersData));
@@ -42,7 +40,6 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
 
     on<UpdateUser>((event, emit) async {
       emit(state.copyWith(status: UsersStatus.loading));
-      await Future.delayed(const Duration(seconds: 1));
       try {
         repository.updateUser(event.userEvent);
         emit(state.copyWith(status: UsersStatus.success, user: event.userEvent));

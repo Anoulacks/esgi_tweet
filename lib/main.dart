@@ -67,6 +67,7 @@ class MyApp extends StatelessWidget {
             create: (context) =>
                 TweetsBloc(
                   repository: RepositoryProvider.of<TweetsRepository>(context),
+                  repositoryUsers: RepositoryProvider.of<UsersRepository>(context),
                 ),
           ),
           BlocProvider(
