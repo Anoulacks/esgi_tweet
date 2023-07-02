@@ -6,10 +6,17 @@ import 'package:esgi_tweet/screens/profile/widgets/user_liked_tweets_list.dart';
 import 'package:esgi_tweet/screens/profile/widgets/user_tweets_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../models/user.dart';
 import '../../utils/shared_preferences.dart';
 
 class UserSelectedProfilePage extends StatefulWidget {
+  static const String routeName = '/UserSelectedProfile';
+
+  static void navigateTo(BuildContext context, UserApp user) {
+    Navigator.of(context).pushNamed(routeName, arguments: user);
+  }
+
   final UserApp user;
 
   const UserSelectedProfilePage({super.key, required this.user});

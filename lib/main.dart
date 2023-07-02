@@ -4,12 +4,15 @@ import 'dart:isolate';
 import 'package:esgi_tweet/blocs/tweets_bloc/tweets_bloc.dart';
 import 'package:esgi_tweet/blocs/users_bloc/users_bloc.dart';
 import 'package:esgi_tweet/models/tweet.dart';
+import 'package:esgi_tweet/models/user.dart';
 import 'package:esgi_tweet/repositorys/image_repository.dart';
 import 'package:esgi_tweet/repositorys/tweets_repository.dart';
 import 'package:esgi_tweet/repositorys/users_repository.dart';
 import 'package:esgi_tweet/screens/area/area_screen.dart';
 import 'package:esgi_tweet/screens/authentification/login_screen.dart';
 import 'package:esgi_tweet/screens/authentification/register_screen.dart';
+import 'package:esgi_tweet/screens/profile/profile_screen.dart';
+import 'package:esgi_tweet/screens/profile/user_selected_profile_screen.dart';
 import 'package:esgi_tweet/screens/tweet/tweet_add_screen.dart';
 import 'package:esgi_tweet/screens/tweet/tweet_detail_screen.dart';
 import 'package:esgi_tweet/screens/tweet/tweet_home_screen.dart';
@@ -105,6 +108,19 @@ class MyApp extends StatelessWidget {
                 if (arguments is Tweet) {
                   content = TweetDetailScreen(tweet: arguments);
                 }
+                break;
+              case ProfileScreen.routeName:
+                final arguments = settings.arguments;
+                if (arguments is bool) {
+                  content = ProfileScreen(checkBackButton: arguments);
+                }
+                break;
+              case UserSelectedProfilePage.routeName:
+                final arguments = settings.arguments;
+                if (arguments is UserApp) {
+                  content = UserSelectedProfilePage(user: arguments);
+                }
+                break;
             }
 
             return MaterialPageRoute(

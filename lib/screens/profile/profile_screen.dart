@@ -9,7 +9,14 @@ import '../../utils/shared_preferences.dart';
 import 'edit_profile_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  static const String routeName = '/Profile';
+  final bool checkBackButton;
+
+  static void navigateTo(BuildContext context, bool checkBackButton) {
+    Navigator.of(context).pushNamed(routeName, arguments: checkBackButton);
+  }
+
+  const ProfileScreen({Key? key, this.checkBackButton = false}) : super(key: key);
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -37,6 +44,9 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
     final isDarkModeEnabled = UserSharedPreferences.isDarkModeEnabled();
 
     return Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: widget.checkBackButton,
+        ),
         body: SafeArea(
           child: BlocBuilder<UsersBloc, UsersState>(
             builder: (context, state) {
