@@ -63,6 +63,14 @@ class TweetsRepository {
     }
   }
 
+  Future<void> deleteTweet(tweet) async {
+    try {
+      await tweetsCollection.doc(tweet.id).delete();
+    } catch (error) {
+      throw Exception('Erreur lors de la suppression du tweet');
+    }
+  }
+
   Future<void> updateLikeTweet(String? tweetId, String userId) {
     DocumentReference documentReference = tweetsCollection.doc(tweetId);
     return FirebaseFirestore.instance

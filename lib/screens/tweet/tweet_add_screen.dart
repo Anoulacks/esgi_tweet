@@ -73,6 +73,7 @@ class _TweetAddScreenState extends State<TweetAddScreen> {
                     RepositoryProvider.of<TweetsRepository>(context)
                         .addTweets(tweet);
                   }
+                  _showSnackBar(context, "Tweet publié");
                 }
               }
             },
@@ -121,5 +122,14 @@ class _TweetAddScreenState extends State<TweetAddScreen> {
 
   void getImageEvent(File? file) {
     image = file;
+  }
+
+  void _showSnackBar(BuildContext context, String text) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(text),
+      ),
+    );
+    Navigator.pop(context);
   }
 }
