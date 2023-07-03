@@ -19,6 +19,7 @@ import 'package:esgi_tweet/screens/tweet/tweet_home_screen.dart';
 import 'package:esgi_tweet/utils/shared_preferences.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -37,8 +38,43 @@ void main() async {
       );
     }).sendPort);
 
+    _initNotificationsHandling();
     runApp(const MyApp());
   }, FirebaseCrashlytics.instance.recordError);
+}
+
+
+
+void _initNotificationsHandling() async {
+  final firebaseMessaging = FirebaseMessaging.instance;
+
+  final permissionSettings = await firebaseMessaging.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+
+  print('Authorisation status: ${permissionSettings.authorizationStatus}');
+
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
+
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    print('Got a message whilst in the foreground!');
+    print('Message data: ${message.data}');
+    if (message.notification != null) {
+      print('Message also contained a notification: ${message.notification}');
+    }
+  });
+
+  //FirebaseMessaging.onMessageOpenedApp.listen(_onNotificationOpenedApp);
 }
 
 class MyApp extends StatelessWidget {
