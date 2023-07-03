@@ -67,5 +67,18 @@ class TweetsBloc extends Bloc<TweetsEvent, TweetsState> {
         throw Exception(error);
       }
     });
+
+    on<DeleteTweet>((event, emit) async {
+      emit(state.copyWith(status: TweetsStatus.loading));
+      try {
+        await repository.deleteTweet(event.tweet);
+        emit(state.copyWith(status: TweetsStatus.success));
+      } catch (error) {
+        emit(state.copyWith(
+            status: TweetsStatus.error, error: error.toString()));
+        throw Exception(error);
+      }
+    });
+
   }
 }

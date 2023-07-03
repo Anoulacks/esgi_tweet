@@ -2,7 +2,6 @@ import 'package:esgi_tweet/blocs/tweets_bloc/tweets_bloc.dart';
 import 'package:esgi_tweet/models/tweet.dart';
 import 'package:esgi_tweet/models/user.dart';
 import 'package:esgi_tweet/repositorys/users_repository.dart';
-import 'package:esgi_tweet/screens/tweet/tweet_add_screen.dart';
 import 'package:esgi_tweet/screens/tweet/widgets/tweet_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,16 +22,25 @@ class TweetDetailScreen extends StatefulWidget {
 }
 
 class _TweetDetailScreenState extends State<TweetDetailScreen> {
+  String currentUserId = '';
 
   @override
   void initState() {
     super.initState();
     _fetchTweets();
+    _getCurrentUserId();
   }
 
   void _fetchTweets() {
-    print('test');
     context.read<TweetsBloc>().add(GetTweetsDetail(widget.tweet));
+  }
+
+  void _getCurrentUserId() async {
+    String currentUser = await RepositoryProvider.of<UsersRepository>(context).getCurrentUserID();
+
+    setState(() {
+      currentUserId = currentUser;
+    });
   }
 
 
@@ -43,6 +51,13 @@ class _TweetDetailScreenState extends State<TweetDetailScreen> {
         appBar: AppBar(
           title: const Text('Tweet'),
           centerTitle: true,
+          actions: [
+            if (currentUserId == widget.tweet.userId)
+              IconButton(onPressed: () {
+                _showDeleteConfirmationDialog(context);
+              },
+                  icon: Icon(Icons.delete))
+          ],
         ),
         body: BlocBuilder<TweetsBloc, TweetsState>(
           builder: (context, state) {
@@ -99,5 +114,47 @@ class _TweetDetailScreenState extends State<TweetDetailScreen> {
         ),
       );
     });
+  }
+
+  void _showDeleteConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Supprimer le tweet'),
+          content: const Text('Êtes-vous sûr de vouloir supprimer ce tweet ?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Annuler'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                _deleteTweet();
+              },
+              child: const Text('Supprimer'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _deleteTweet() {
+    final tweetBloc = BlocProvider.of<TweetsBloc>(context);
+    tweetBloc.add(DeleteTweet(widget.tweet));
+    _showSnackBar(context, "Tweet supprimé");
+    Navigator.pop(context);
+  }
+
+  void _showSnackBar(BuildContext context, String text) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(text),
+      ),
+    );
   }
 }

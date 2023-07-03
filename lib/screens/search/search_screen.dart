@@ -77,16 +77,14 @@ class _SearchScreenState extends State<SearchScreen> {
               }
               usersList = userList;
               final searchText = _textFieldController.text.toLowerCase();
-              if (searchText.isEmpty){
-                filteredUserList = [];
-              }else{
+
               filteredUserList = usersList
                   .where((user) =>
                       user.firstname.toLowerCase().contains(searchText) ||
                           user.pseudo.toLowerCase().contains(searchText) ||
                           user.lastname.toLowerCase().contains(searchText))
                   .toList();
-              }
+
 
               return SmartRefresher(
                   controller: _refreshController,
