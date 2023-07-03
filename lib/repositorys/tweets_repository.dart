@@ -65,9 +65,26 @@ class TweetsRepository {
 
   Future<void> deleteTweet(tweet) async {
     try {
+      final tweetsCollection = FirebaseFirestore.instance.collection('tweets');
       await tweetsCollection.doc(tweet.id).delete();
+
+      if (tweet.idTweetParent != null && tweet.idTweetParent != "") {
+        final tweetParentSnapshot = await tweetsCollection.doc(tweet.idTweetParent).get();
+        final tweetParentData = tweetParentSnapshot.data();
+
+        if (tweetParentData != null) {
+          final comments = tweetParentData['comments'];
+          final updatedComments = List.from(comments);
+
+          updatedComments.remove(tweet.id);
+
+          await tweetsCollection.doc(tweet.idTweetParent).update({
+            'comments': updatedComments,
+          });
+        }
+      }
     } catch (error) {
-      throw Exception('Erreur lors de la suppression du tweet');
+      throw Exception(error);
     }
   }
 
