@@ -22,3 +22,9 @@ class GetTweetsDetail extends TweetsEvent {
 
   GetTweetsDetail(this.tweet);
 }
+
+class DeleteTweet extends TweetsEvent {
+  final Tweet tweet;
+
+  DeleteTweet(this.tweet);
+}
