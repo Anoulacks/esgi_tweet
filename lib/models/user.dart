@@ -12,6 +12,7 @@ class UserApp {
   final String address;
   final List<dynamic>? followers;
   final List<dynamic>? followings;
+  final String? notifToken;
 
   UserApp(
       {this.id,
@@ -24,7 +25,9 @@ class UserApp {
       required this.phoneNumber,
       required this.address,
       this.followers,
-      this.followings,});
+      this.followings,
+        this.notifToken
+      });
 
   Map<String, dynamic> toMap() {
     return {
@@ -39,6 +42,7 @@ class UserApp {
       'address': address,
       'followers': followers,
       'followings': followings,
+      'notifToken': notifToken,
     };
   }
 
@@ -57,6 +61,7 @@ class UserApp {
       address: data["address"],
       followers: data["followers"],
       followings: data["followings"],
+      notifToken: data["notifToken"]
     );
   }
 
@@ -73,6 +78,7 @@ class UserApp {
         'phoneNumber: $phoneNumber, '
         'address: $address, '
         'followers: $followers, '
-        'followings: $followings)';
+        'followings: $followings,'
+        'notifToken: $notifToken)';
   }
 }

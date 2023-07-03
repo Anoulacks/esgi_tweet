@@ -4,6 +4,7 @@ import 'package:esgi_tweet/models/user.dart';
 import 'package:esgi_tweet/screens/authentification/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:esgi_tweet/screens/area/area_screen.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class UsersRepository {
@@ -29,6 +30,7 @@ class UsersRepository {
         'followers': [],
         'followings': [],
         'tweets': [],
+        'notifToken': ""
       });
 
     } on FirebaseAuthException catch (e) {
@@ -95,6 +97,7 @@ class UsersRepository {
           email: email,
           password: password
       );
+
       BlocProvider.of<UsersBloc>(context).add(GetUser());
       AreaScreen.navigateTo(context);
     } on FirebaseAuthException catch (e) {
@@ -109,6 +112,7 @@ class UsersRepository {
   String getCurrentUserID() {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
+      updateNotificationToken(user.uid);
       return user.uid;
     }
     return '';
@@ -123,6 +127,11 @@ class UsersRepository {
     final snapshot = await usersCollection.get();
     final usersData = snapshot.docs.map((element) => UserApp.fromSnapshot(element)).toList();
     return usersData;
+  }
+
+  void updateNotificationToken(String userId) async {
+    final userToken = await FirebaseMessaging.instance.getToken();
+    await usersCollection.doc(userId).update({'notifToken': userToken});
   }
 
   signOut(context) async {
