@@ -1,12 +1,10 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:esgi_tweet/models/user.dart';
 import 'package:esgi_tweet/repositorys/users_repository.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meta/meta.dart';
 
 part 'users_event.dart';
+
 part 'users_state.dart';
 
 class UsersBloc extends Bloc<UsersEvent, UsersState> {
@@ -30,7 +28,7 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
       emit(state.copyWith(status: UsersStatus.loading));
       try {
         final usersData = await repository.getUsers();
-        emit(state.copyWith(status: UsersStatus.success,users: usersData));
+        emit(state.copyWith(status: UsersStatus.success, users: usersData));
       } catch (error) {
         emit(
             state.copyWith(status: UsersStatus.error, error: error.toString()));
@@ -42,7 +40,8 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
       emit(state.copyWith(status: UsersStatus.loading));
       try {
         repository.updateUser(event.userEvent);
-        emit(state.copyWith(status: UsersStatus.success, user: event.userEvent));
+        emit(
+            state.copyWith(status: UsersStatus.success, user: event.userEvent));
       } catch (error) {
         emit(
             state.copyWith(status: UsersStatus.error, error: error.toString()));
@@ -50,5 +49,4 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
       }
     });
   }
-
 }

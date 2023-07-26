@@ -6,7 +6,8 @@ class TweetsRepository {
 
   addTweets(Tweet tweet) async {
     try {
-      DocumentReference tweetReference = await tweetsCollection.add(tweet.toMap());
+      DocumentReference tweetReference =
+          await tweetsCollection.add(tweet.toMap());
       if (tweet.idTweetParent != null && tweet.idTweetParent != '') {
         updateCommentTweet(tweet.idTweetParent, tweetReference.id);
       }
@@ -16,7 +17,8 @@ class TweetsRepository {
   }
 
   Future<List<Tweet>> getTweets() async {
-    final snapshot = await tweetsCollection.orderBy('date', descending: true).get();
+    final snapshot =
+        await tweetsCollection.orderBy('date', descending: true).get();
     final tweetsData =
         snapshot.docs.map((element) => Tweet.fromSnapshot(element)).toList();
     return tweetsData;
@@ -27,7 +29,8 @@ class TweetsRepository {
         .where('userId', isEqualTo: userId)
         .orderBy('date', descending: true)
         .get();
-    final tweetsData = snapshot.docs.map((element) => Tweet.fromSnapshot(element)).toList();
+    final tweetsData =
+        snapshot.docs.map((element) => Tweet.fromSnapshot(element)).toList();
     return tweetsData;
   }
 
@@ -37,7 +40,8 @@ class TweetsRepository {
         .orderBy('date', descending: true)
         .get();
 
-    final tweetsData = snapshot.docs.map((element) => Tweet.fromSnapshot(element)).toList();
+    final tweetsData =
+        snapshot.docs.map((element) => Tweet.fromSnapshot(element)).toList();
     return tweetsData;
   }
 
@@ -47,7 +51,7 @@ class TweetsRepository {
         .orderBy('date', descending: true)
         .get();
     final tweetsData =
-    snapshot.docs.map((element) => Tweet.fromSnapshot(element)).toList();
+        snapshot.docs.map((element) => Tweet.fromSnapshot(element)).toList();
     return tweetsData;
   }
 
@@ -69,13 +73,13 @@ class TweetsRepository {
       await tweetsCollection.doc(tweet.id).delete();
 
       if (tweet.idTweetParent != null && tweet.idTweetParent != "") {
-        final tweetParentSnapshot = await tweetsCollection.doc(tweet.idTweetParent).get();
+        final tweetParentSnapshot =
+            await tweetsCollection.doc(tweet.idTweetParent).get();
         final tweetParentData = tweetParentSnapshot.data();
 
         if (tweetParentData != null) {
           final comments = tweetParentData['comments'];
           final updatedComments = List.from(comments);
-
           updatedComments.remove(tweet.id);
 
           await tweetsCollection.doc(tweet.idTweetParent).update({
@@ -119,26 +123,28 @@ class TweetsRepository {
     DocumentReference documentReference = tweetsCollection.doc(tweetIdParent);
     return FirebaseFirestore.instance
         .runTransaction((transaction) async {
-      DocumentSnapshot snapshot = await transaction.get(documentReference);
+          DocumentSnapshot snapshot = await transaction.get(documentReference);
 
-      if (!snapshot.exists) {
-        throw Exception("Tweet does not exist!");
-      }
+          if (!snapshot.exists) {
+            throw Exception("Tweet does not exist!");
+          }
 
-      if (tweetIdParent == '') {
-        throw Exception("Tweet Parent does not exist!");
-      }
+          if (tweetIdParent == '') {
+            throw Exception("Tweet Parent does not exist!");
+          }
 
-      print('affiche tweet id et parentid $tweetId $tweetIdParent');
+          print('affiche tweet id et parentid $tweetId $tweetIdParent');
 
-      final currentComments = List<String>.from((snapshot.get('comments') ?? []));
-      if (!currentComments.contains(tweetId)) {
-        currentComments.add(tweetId!);
-      }
+          final currentComments =
+              List<String>.from((snapshot.get('comments') ?? []));
+          if (!currentComments.contains(tweetId)) {
+            currentComments.add(tweetId!);
+          }
 
-      transaction.update(documentReference, {'comments': currentComments});
-    })
+          transaction.update(documentReference, {'comments': currentComments});
+        })
         .then((value) => print("Comments count updated to $value"))
-        .catchError((error) => print("Failed to update tweet comments: $error"));
+        .catchError(
+            (error) => print("Failed to update tweet comments: $error"));
   }
 }

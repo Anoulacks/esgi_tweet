@@ -43,8 +43,6 @@ void main() async {
   }, FirebaseCrashlytics.instance.recordError);
 }
 
-
-
 void _initNotificationsHandling() async {
   final firebaseMessaging = FirebaseMessaging.instance;
 
@@ -80,7 +78,6 @@ void _initNotificationsHandling() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     final isDarkModeEnabled = UserSharedPreferences.isDarkModeEnabled();
@@ -100,17 +97,14 @@ class MyApp extends StatelessWidget {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) =>
-                TweetsBloc(
-                  repository: RepositoryProvider.of<TweetsRepository>(context),
-                  repositoryUsers: RepositoryProvider.of<UsersRepository>(context),
-                ),
+            create: (context) => TweetsBloc(
+              repository: RepositoryProvider.of<TweetsRepository>(context),
+              repositoryUsers: RepositoryProvider.of<UsersRepository>(context),
+            ),
           ),
           BlocProvider(
-            create: (context) =>
-                UsersBloc(
-                    repository: RepositoryProvider.of<UsersRepository>(context)
-                ),
+            create: (context) => UsersBloc(
+                repository: RepositoryProvider.of<UsersRepository>(context)),
           ),
         ],
         child: MaterialApp(
@@ -171,5 +165,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-

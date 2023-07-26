@@ -42,9 +42,10 @@ class _TweetAddScreenState extends State<TweetAddScreen> {
         backgroundColor: isDarkModeEnabled ? Colors.black12 : Colors.white,
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(context).pop(), child: const Text("Retour"),
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text("Retour"),
           ),
-          Spacer(),
+          const Spacer(),
           TextButton(
             onPressed: () async {
               if (_tweetForm.currentState!.validate()) {
@@ -79,14 +80,15 @@ class _TweetAddScreenState extends State<TweetAddScreen> {
             },
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.blue, // Replace with your desired background color
-                borderRadius: BorderRadius.circular(10), // Replace with your desired border radius
+                color: Colors.blue,
+                borderRadius: BorderRadius.circular(
+                    10),
               ),
-              padding: const EdgeInsets.all(10), // Optional: Add padding if needed
+              padding: const EdgeInsets.all(10),
               child: const Text(
                 'Tweeter',
                 style: TextStyle(
-                  color: Colors.white, // Replace with your desired text color
+                  color: Colors.white,
                 ),
               ),
             ),

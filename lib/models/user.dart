@@ -26,8 +26,7 @@ class UserApp {
       required this.address,
       this.followers,
       this.followings,
-        this.notifToken
-      });
+      this.notifToken});
 
   Map<String, dynamic> toMap() {
     return {
@@ -50,19 +49,18 @@ class UserApp {
       DocumentSnapshot<Map<String, dynamic>> document) {
     final data = document.data()!;
     return UserApp(
-      id: document.id,
-      firstname: data["firstname"],
-      lastname: data["lastname"],
-      pseudo: data["pseudo"],
-      email: data["email"],
-      photoURL: data["photoURL"],
-      birthDate: data["birthDate"],
-      phoneNumber: data["phoneNumber"],
-      address: data["address"],
-      followers: data["followers"],
-      followings: data["followings"],
-      notifToken: data["notifToken"]
-    );
+        id: document.id,
+        firstname: data["firstname"],
+        lastname: data["lastname"],
+        pseudo: data["pseudo"],
+        email: data["email"],
+        photoURL: data["photoURL"],
+        birthDate: data["birthDate"],
+        phoneNumber: data["phoneNumber"],
+        address: data["address"],
+        followers: data["followers"],
+        followings: data["followings"],
+        notifToken: data["notifToken"]);
   }
 
   @override

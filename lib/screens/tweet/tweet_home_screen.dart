@@ -49,7 +49,8 @@ class _TweetHomeScreenState extends State<TweetHomeScreen> {
                   : Icons.dark_mode,
             ),
             onPressed: () {
-              bool isDarkModeEnabled = UserSharedPreferences.isDarkModeEnabled();
+              bool isDarkModeEnabled =
+                  UserSharedPreferences.isDarkModeEnabled();
               UserSharedPreferences.setDarkMode(!isDarkModeEnabled);
               setState(() {
                 runApp(MyApp());
@@ -141,6 +142,29 @@ class _TweetHomeScreenState extends State<TweetHomeScreen> {
   }
 
   void _logout(BuildContext context) {
-    RepositoryProvider.of<UsersRepository>(context).signOut(context);
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Déconnexion'),
+          content: const Text('Êtes-vous sûr de vouloir vous déconnecter ?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Annuler'),
+            ),
+            TextButton(
+              onPressed: () {
+                RepositoryProvider.of<UsersRepository>(context)
+                    .signOut(context);
+              },
+              child: const Text('Se déconnecter'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

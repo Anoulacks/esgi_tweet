@@ -49,7 +49,7 @@ class UserTweetsList extends StatelessWidget {
 
             return SmartRefresher(
               controller: _refreshController,
-              onRefresh: ()=> _onRefresh(context),
+              onRefresh: () => _onRefresh(context),
               child: ListView.builder(
                 itemCount: tweets.length,
                 itemBuilder: (context, index) {
@@ -72,7 +72,7 @@ class UserTweetsList extends StatelessWidget {
                           user: userApp,
                         );
                       }
-                      return Text('Error: pas de données');
+                      return const Text('Pas de données');
                     },
                   );
                 },

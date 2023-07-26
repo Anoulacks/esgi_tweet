@@ -36,13 +36,13 @@ class _TweetDetailScreenState extends State<TweetDetailScreen> {
   }
 
   void _getCurrentUserId() async {
-    String currentUser = await RepositoryProvider.of<UsersRepository>(context).getCurrentUserID();
+    String currentUser = await RepositoryProvider.of<UsersRepository>(context)
+        .getCurrentUserID();
 
     setState(() {
       currentUserId = currentUser;
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -53,10 +53,11 @@ class _TweetDetailScreenState extends State<TweetDetailScreen> {
           centerTitle: true,
           actions: [
             if (currentUserId == widget.tweet.userId)
-              IconButton(onPressed: () {
-                _showDeleteConfirmationDialog(context);
-              },
-                  icon: Icon(Icons.delete))
+              IconButton(
+                  onPressed: () {
+                    _showDeleteConfirmationDialog(context);
+                  },
+                  icon: const Icon(Icons.delete))
           ],
         ),
         body: BlocBuilder<TweetsBloc, TweetsState>(
@@ -94,7 +95,6 @@ class _TweetDetailScreenState extends State<TweetDetailScreen> {
                             ConnectionState.waiting) {
                           return const CircularProgressIndicator();
                         } else if (snapshot.hasError) {
-                          print(snapshot.error);
                           return Text('Error: ${snapshot.error}');
                         }
                         UserApp userApp = snapshot.data!;
@@ -104,7 +104,7 @@ class _TweetDetailScreenState extends State<TweetDetailScreen> {
                             user: userApp,
                           );
                         }
-                        return Text('Error: pas de données');
+                        return const Text('Error: pas de données');
                       },
                     );
                   },

@@ -44,12 +44,11 @@ class UserLikedTweetsList extends StatelessWidget {
                 return FutureBuilder<UserApp>(
                   future: RepositoryProvider.of<UsersRepository>(context)
                       .getUserById(tweet.userId),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<UserApp> snapshot) {
+                  builder:
+                      (BuildContext context, AsyncSnapshot<UserApp> snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const CircularProgressIndicator();
                     } else if (snapshot.hasError) {
-                      print(snapshot.error);
                       return Text('Error: ${snapshot.error}');
                     }
                     UserApp userApp = snapshot.data!;
@@ -59,7 +58,7 @@ class UserLikedTweetsList extends StatelessWidget {
                         user: userApp,
                       );
                     }
-                    return Text('Error: pas de données');
+                    return const Text('Pas de données');
                   },
                 );
               },

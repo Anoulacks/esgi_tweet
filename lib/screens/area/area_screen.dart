@@ -25,7 +25,7 @@ class _AreaScreenState extends State<AreaScreen> {
     ProfileScreen(),
   ];
 
-  void onTap(int index){
+  void onTap(int index) {
     setState(() {
       currentIndex = index;
     });
@@ -42,9 +42,18 @@ class _AreaScreenState extends State<AreaScreen> {
         selectedItemColor: Colors.blue,
         unselectedItemColor: Colors.grey.withOpacity(0.5),
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Accueil'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Rechercher'),
-          BottomNavigationBarItem(icon: Icon(Icons.account_circle), label: 'Profil')
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Accueil',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            label: 'Rechercher',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_circle),
+            label: 'Profil',
+          )
         ],
       ),
     );

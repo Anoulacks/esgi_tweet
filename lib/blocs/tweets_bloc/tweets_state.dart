@@ -37,12 +37,10 @@ class TweetsState {
       status: status ?? this.status,
       tweets: tweets ?? this.tweets,
       tweetsProfile: tweetsProfile ?? this.tweetsProfile,
-      tweetsProfileSelected: tweetsProfileSelected ?? this.tweetsProfileSelected,
+      tweetsProfileSelected:
+          tweetsProfileSelected ?? this.tweetsProfileSelected,
       tweetsDetail: tweetsDetail ?? this.tweetsDetail,
       error: error ?? this.error,
     );
   }
-
-
 }
-

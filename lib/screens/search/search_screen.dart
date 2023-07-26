@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:esgi_tweet/blocs/users_bloc/users_bloc.dart';
 import 'package:esgi_tweet/models/user.dart';
 import 'package:esgi_tweet/screens/search/profile_card_item.dart';
@@ -6,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import '../../repositorys/users_repository.dart';
 import '../profile/user_selected_profile_screen.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -18,7 +16,7 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final _refreshController = RefreshController(initialRefresh: false);
-  TextEditingController _textFieldController = TextEditingController();
+  final TextEditingController _textFieldController = TextEditingController();
   List<UserApp> filteredUserList = [];
   List<UserApp> usersList = [];
 
@@ -38,21 +36,21 @@ class _SearchScreenState extends State<SearchScreen> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: TextField(
-              controller: _textFieldController,
-              onChanged: (value) {
-                setState(() {});
-              },
-              decoration: InputDecoration(
-                hintText: 'Recherche',
-                filled: true,
-                fillColor: Colors.white54,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                  borderSide: BorderSide.none,
-                ),
-                suffixIcon: Icon(Icons.search),
-              ),
+          controller: _textFieldController,
+          onChanged: (value) {
+            setState(() {});
+          },
+          decoration: InputDecoration(
+            hintText: 'Rechercher',
+            filled: true,
+            fillColor: Colors.white54,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20.0),
+              borderSide: BorderSide.none,
             ),
+            suffixIcon: Icon(Icons.search),
+          ),
+        ),
       ),
       body: BlocBuilder<UsersBloc, UsersState>(
         builder: (context, state) {
@@ -81,24 +79,29 @@ class _SearchScreenState extends State<SearchScreen> {
               filteredUserList = usersList
                   .where((user) =>
                       user.firstname.toLowerCase().contains(searchText) ||
-                          user.pseudo.toLowerCase().contains(searchText) ||
-                          user.lastname.toLowerCase().contains(searchText))
+                      user.pseudo.toLowerCase().contains(searchText) ||
+                      user.lastname.toLowerCase().contains(searchText))
                   .toList();
 
-
               return SmartRefresher(
-                  controller: _refreshController,
-                  enablePullDown: true,
-                  onRefresh: () async {
-                    _onRefreshList(context);
+                controller: _refreshController,
+                enablePullDown: true,
+                onRefresh: () async {
+                  _onRefreshList(context);
+                },
+                child: ListView.builder(
+                  itemCount: filteredUserList.length,
+                  itemBuilder: (context, index) {
+                    final user = filteredUserList[index];
+                    return ProfileCardItem(
+                      user: user,
+                      onTap: () {
+                        _onCardTap(context, user);
+                      },
+                    );
                   },
-                  child: ListView.builder(
-                    itemCount: filteredUserList.length,
-                    itemBuilder: (context, index) {
-                      final user = filteredUserList[index];
-                      return ProfileCardItem(user: user, onTap: () {_onCardTap(context, user);});
-                    },
-                  ));
+                ),
+              );
           }
         },
       ),

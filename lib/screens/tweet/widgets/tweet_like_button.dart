@@ -8,21 +8,22 @@ class TweetLikeButton extends StatefulWidget {
   final List<dynamic>? likes;
   final Function callback;
 
-  const TweetLikeButton({Key? key, required this.likes, required this.callback}) : super(key: key);
+  const TweetLikeButton({Key? key, required this.likes, required this.callback})
+      : super(key: key);
 
   @override
   State<TweetLikeButton> createState() => _TweetLikeButtonState();
 }
 
 class _TweetLikeButtonState extends State<TweetLikeButton> {
-
   bool isLiked = false;
   int counterLikes = 0;
 
   @override
   void initState() {
     super.initState();
-    bool? initLiked = widget.likes?.contains(RepositoryProvider.of<UsersRepository>(context).getCurrentUserID());
+    bool? initLiked = widget.likes?.contains(
+        RepositoryProvider.of<UsersRepository>(context).getCurrentUserID());
     if (initLiked == true) {
       isLiked = true;
     }
@@ -32,7 +33,7 @@ class _TweetLikeButtonState extends State<TweetLikeButton> {
   void _updateLike() async {
     setState(() {
       isLiked = !isLiked;
-      if(isLiked) {
+      if (isLiked) {
         counterLikes += 1;
       } else {
         counterLikes -= 1;
@@ -53,7 +54,8 @@ class _TweetLikeButtonState extends State<TweetLikeButton> {
           },
           icon: Icon(
             isLiked ? Icons.favorite : Icons.favorite_border,
-            color: isLiked ? Colors.red : null,),
+            color: isLiked ? Colors.red : null,
+          ),
           iconSize: 18,
         ),
         Text(
@@ -61,7 +63,8 @@ class _TweetLikeButtonState extends State<TweetLikeButton> {
           style: TextStyle(
             color: isDarkModeEnabled ? Colors.white : Colors.black,
             fontSize: 12.0,
-          ),)
+          ),
+        ),
       ],
     );
   }

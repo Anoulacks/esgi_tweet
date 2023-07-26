@@ -35,18 +35,14 @@ class TweetCard extends StatelessWidget {
             },
             child: CircleAvatar(
               backgroundImage: user.photoURL != null
-                  ? Image
-                  .network(
-                user!.photoURL!,
-                fit: BoxFit.cover,
-              )
-                  .image
-                  : Image
-                  .asset(
-                'assets/images/pp_twitter.jpeg',
-                fit: BoxFit.cover,
-              )
-                  .image,
+                  ? Image.network(
+                      user!.photoURL!,
+                      fit: BoxFit.cover,
+                    ).image
+                  : Image.asset(
+                      'assets/images/pp_twitter.jpeg',
+                      fit: BoxFit.cover,
+                    ).image,
             ),
           ),
           title: Row(
@@ -90,29 +86,29 @@ class TweetCard extends StatelessWidget {
               ),
               tweet.image != null
                   ? Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10.0),
-                        child: AspectRatio(
-                          aspectRatio: 16 / 9,
-                          child: GestureDetector(
-                            onTap: () =>
-                                _showUserPictureDialog(context, tweet.image!),
-                            child: Image.network(
-                              tweet.image!,
-                              fit: BoxFit.cover,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10.0),
+                              child: AspectRatio(
+                                aspectRatio: 16 / 9,
+                                child: GestureDetector(
+                                  onTap: () => _showUserPictureDialog(
+                                      context, tweet.image!),
+                                  child: Image.network(
+                                    tweet.image!,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ),
-                  ),
-                ],
-              )
+                      ],
+                    )
                   : const Text(''),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -120,7 +116,7 @@ class TweetCard extends StatelessWidget {
                   TweetButton(
                     icon: Icons.chat,
                     value:
-                    '${tweet.comments != null ? tweet.comments?.length : '0'}',
+                        '${tweet.comments != null ? tweet.comments?.length : '0'}',
                     callback: _addComment,
                   ),
                   TweetLikeButton(
@@ -148,7 +144,7 @@ class TweetCard extends StatelessWidget {
 
   void _updateLike(context) {
     final userId =
-    RepositoryProvider.of<UsersRepository>(context).getCurrentUserID();
+        RepositoryProvider.of<UsersRepository>(context).getCurrentUserID();
     RepositoryProvider.of<TweetsRepository>(context)
         .updateLikeTweet(tweet.id, userId);
   }
@@ -162,10 +158,10 @@ class TweetCard extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return Dialog(
-              child: Image.network(
-                imageURL ?? '',
-                fit: BoxFit.cover,
-              )
+          child: Image.network(
+            imageURL ?? '',
+            fit: BoxFit.cover,
+          ),
         );
       },
     );

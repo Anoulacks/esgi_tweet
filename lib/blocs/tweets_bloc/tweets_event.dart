@@ -9,11 +9,13 @@ class GetAllTweets extends TweetsEvent {
 
 class GetTweetsByUser extends TweetsEvent {
   final String userId;
+
   GetTweetsByUser(this.userId);
 }
 
 class GetLikedTweets extends TweetsEvent {
   final String userId;
+
   GetLikedTweets(this.userId);
 }
 

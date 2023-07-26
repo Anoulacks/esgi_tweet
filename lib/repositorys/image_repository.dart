@@ -5,7 +5,8 @@ class ImageRepository {
   final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
 
   Future<String> getImage(reference) async {
-    final String url = await firebaseStorage.ref('images/$reference').getDownloadURL();
+    final String url =
+        await firebaseStorage.ref('images/$reference').getDownloadURL();
     return url;
   }
 

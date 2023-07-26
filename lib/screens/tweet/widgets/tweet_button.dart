@@ -7,7 +7,12 @@ class TweetButton extends StatelessWidget {
   final String value;
   final Function callback;
 
-  const TweetButton({Key? key, required this.icon, required this.value, required this.callback}) : super(key: key);
+  const TweetButton(
+      {Key? key,
+      required this.icon,
+      required this.value,
+      required this.callback})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,19 +21,19 @@ class TweetButton extends StatelessWidget {
     return Row(
       children: [
         IconButton(
-            onPressed: () {
-              print("button pressed");
-              callback(context);
-            },
-            icon: Icon(icon),
-            iconSize: 18,
+          onPressed: () {
+            callback(context);
+          },
+          icon: Icon(icon),
+          iconSize: 18,
         ),
         Text(
           value,
           style: TextStyle(
             color: isDarkModeEnabled ? Colors.white : Colors.black,
             fontSize: 12.0,
-        ),)
+          ),
+        ),
       ],
     );
   }

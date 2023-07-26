@@ -6,7 +6,9 @@ class SubscribeButton extends StatefulWidget {
   final Function(bool) callback;
   final String? userId;
 
-  const SubscribeButton({Key? key, required this.callback, required this.userId}) : super(key: key);
+  const SubscribeButton(
+      {Key? key, required this.callback, required this.userId})
+      : super(key: key);
 
   @override
   State<SubscribeButton> createState() => _SubscribeButtonState();
@@ -22,7 +24,8 @@ class _SubscribeButtonState extends State<SubscribeButton> {
   }
 
   bool _checkFollowingStatus() {
-    final List<dynamic>? followingsArray = BlocProvider.of<UsersBloc>(context).state.user?.followings;
+    final List<dynamic>? followingsArray =
+        BlocProvider.of<UsersBloc>(context).state.user?.followings;
     return followingsArray?.contains(widget.userId) ?? false;
   }
 
@@ -31,7 +34,8 @@ class _SubscribeButtonState extends State<SubscribeButton> {
     return ElevatedButton(
       onPressed: () {
         setState(() {
-          checkFollowing = checkFollowing != null && checkFollowing != false ? false : true;
+          checkFollowing =
+              checkFollowing != null && checkFollowing != false ? false : true;
         });
         widget.callback(checkFollowing!);
       },
